@@ -1,0 +1,121 @@
+:root {
+    --primary-color: hsl(213deg 85% 97%);
+    --secondary-color: hsl(233deg 36% 38%);
+    --shadow-color: hsl(231deg 62% 94%);
+    --text-color: hsl(0deg 0% 30%);
+    --input-text-color: hsl(0deg 0% 30%);
+    --background-color: #dde5f4;
+}
+
+* {
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    user-select: none;
+    overflow-y: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--background-color);
+    height: 100vh;
+}
+
+.screen-1 {
+    background: var(--primary-color);
+    padding: 3em;
+    display: flex;
+    flex-direction: column;
+    border-radius: 30px;
+    box-shadow: 0 0 2em var(--shadow-color);
+    gap: 2em;
+    margin-top: 20vh;
+}
+
+.screen-1 .logo {
+    margin-top: -3em;
+}
+
+.screen-1 .email,
+.screen-1 .password {
+    background: white;
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    border-radius: 20px;
+    color: var(--input-text-color);
+    box-shadow: 0 0 2em #afafaf;
+}
+
+.screen-1 .email {
+    margin-bottom: 1em;
+}
+
+.screen-1 .email .sec-2,
+.screen-1 .password .sec-2 {
+    display: flex;
+    align-items: center;
+}
+
+.screen-1 .email input,
+.screen-1 .password input {
+    outline: none;
+    border: none;
+    flex: 1;
+    margin-left: 0.5em;
+    color: var(--input-text-color);
+}
+
+.screen-1 .email input::placeholder,
+.screen-1 .password input::placeholder {
+    color: var(--input-text-color);
+    font-size: 0.9em;
+}
+
+.screen-1 .login {
+    padding: 0.8em;
+    background: var(--secondary-color);
+    color: white;
+    border: none;
+    border-radius: 28px;
+    font-weight: 600;
+    margin-top: 2em;
+    width: 100%;
+    text-align: center;
+}
+
+.screen-1 .footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9em; /* Adjust the font size as needed */
+    color: var(--input-text-color);
+    padding-top: 1em;
+    font-weight: 600;
+}
+
+.screen-1 .footer span {
+    cursor: pointer;
+    color: var(--input-text-color);
+}
+
+button,
+input {
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-size: 100%;
+    line-height: 1.15;
+    margin: 0;
+}
+
+.ionicon {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke-width: 2px;
+}
+
+.show-hide {
+    cursor: pointer;
+    margin-left: 0.5em; /* Adjust spacing as needed */
+}

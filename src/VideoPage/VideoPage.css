@@ -1,0 +1,44 @@
+.video-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.video-page-item {
+  width: 60%;
+  margin: 3vh 0 30px 20vh;
+}
+
+.video-player {
+  width: 100%;
+}
+
+.video-player video {
+  border-radius: 10px;
+  width: 90%;
+  height: 80%;
+}
+
+.video-details {
+  margin-top: 10px;
+}
+
+.div-do-search {
+  margin-top: 1vh;
+}
+
+.main-content {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.video-bar {
+  width: 20%;
+  max-height: 80vh;
+  overflow-y: auto;
+  margin-top: 20px;
+  margin-right: 20px;
+  padding: 10px;
+  border-radius: 10px;
+}

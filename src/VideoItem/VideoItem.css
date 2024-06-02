@@ -1,0 +1,14 @@
+.video-item {
+    margin: 16px 0;
+}
+.video-item:hover {
+    cursor: pointer;
+}
+.video-item .video video{
+    height: 14vh;
+    border-radius: 10px;
+}
+
+.video-item p {
+    margin: 8px 0;
+}

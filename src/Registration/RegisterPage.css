@@ -1,31 +1,35 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400&display=swap');
+/* RegisterPage.css */
 
 body {
-    font-family: 'Poppins', sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #f0f2f5;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    height: 100vh;
+    margin: 0;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .wrapper {
-    width: 100%;
-    position: absolute;
-    max-width: 600px;
-    background: #fff;
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
     display: flex;
+    width: 100%;
+    max-width: 600px;
+    background: var(--background-color);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
     align-items: center;
     justify-content: center;
     padding: 50px;
     margin-top: 20vh;
+    border-radius: 10px;
+    transition: background-color 0.3s, box-shadow 0.3s;
 }
 
 .inner {
     width: 100%;
 }
 
-.registr-form {
+.register-form {
     width: 100%;
     padding: 30px;
 }
@@ -35,7 +39,7 @@ h3 {
     font-size: 24px;
     margin-bottom: 30px;
     font-weight: 500;
-    color: #333;
+    color: var(--text-color);
 }
 
 .form-group {
@@ -48,17 +52,16 @@ h3 {
     width: calc(50% - 10px);
     padding: 10px 0;
     border: none;
-    border-bottom: 2px solid #000;
+    border-bottom: 2px solid var(--text-color);
+    background: transparent;
     outline: none;
     transition: border-color 0.3s;
     font-family: 'Poppins', sans-serif;
     font-size: 16px;
-    border-radius: 0;
 }
 
 .form-group .form-input:focus {
-    border-bottom-color: #000;
-    box-shadow: none;
+    border-bottom-color: var(--backgroud-color);
 }
 
 .form-wrapper {
@@ -70,42 +73,39 @@ h3 {
     width: 100%;
     padding: 10px 0;
     border: none;
-    border-bottom: 2px solid #000;
+    border-bottom: 2px solid var(--text-color);
+    background: transparent;
     outline: none;
     transition: border-color 0.3s;
     font-family: 'Poppins', sans-serif;
     font-size: 16px;
-    border-radius: 0;
 }
 
 .form-wrapper .form-input:focus {
-    border-bottom-color: #000;
-    box-shadow: none;
+    border-bottom-color: var(--backgroud-color);
 }
 
 .form-wrapper i {
     position: absolute;
     top: 50%;
-    right: 3px; /* Adjusted position to move icon left */
+    right: 3px;
     transform: translateY(-50%);
-    color: #333;
+    color: var(--text-color);
 }
 
 .register-button {
     display: block;
-    width: 50%;
+    width: 100%;
     padding: 10px;
-    background: #000;
-    color: #fff;
+    background: var(--text-color);
+    color: var(--background-color);
     border: none;
     border-radius: 4px;
     font-weight: bold;
     cursor: pointer;
-    margin: 20px auto 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Poppins', sans-serif;
+    margin: 20px 0;
+    text-align: center;
+    transition: background-color 0.3s;
 }
 
 .register-button i {
@@ -114,14 +114,22 @@ h3 {
 }
 
 .register-button:hover {
-    background: #333;
-}
- .footer {
-    justify-content: space-between;
-    font-size: 0.9em; /* Adjust the font size as needed */
-    color: var(--input-text-color);
-    padding-top: 2em;
-    font-weight: 600;
-    text-align: right;
+    background: var(--btn-hover);
 }
 
+.footer {
+    text-align: center;
+    font-size: 0.9em;
+    color: var(--text-color);
+    padding-top: 1em;
+    font-weight: 600;
+}
+
+.footer span {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.footer span:hover {
+    color: var(--text-color);
+}

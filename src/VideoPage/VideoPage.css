@@ -2,6 +2,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 100vh; /* Full viewport height */
+  overflow: auto; /* Allow scrolling */
 }
 
 .video-page-item {
@@ -33,13 +35,59 @@
   width: 100%;
   justify-content: space-between;
 }
-
+.views-time{
+  margin-top: 8px;
+  font-size:10px;
+  font-weight: 600;
+}
+.video-img-dir{
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.video-img{
+  width:40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.video-title{
+    font-size: 1.5rem;
+    line-height: 2.8rem;
+    font-weight: 700;
+}
 .video-bar {
   width: 20%;
   max-height: 80vh;
-  overflow-y: auto;
   margin-top: 20px;
   margin-right: 20px;
   padding: 10px;
   border-radius: 10px;
 }
+.like-dislike-container {
+  display: flex;
+  align-items: center;
+  background-color: #f5f5f5;
+  border-radius: 20px;
+  margin-right: 130px;
+  width: 110px;
+  padding: 5px 10px 5px 10px;
+  gap: 15px; /* Add some space between the buttons */
+}
+
+.like-dislike-button {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.like-dislike-button span {
+  margin-left: 5px; /* Add some space between the icon and the text */
+}
+
+.separator {
+  width: 1px;
+  height: 20px; /* Match the height of the icons */
+  background-color: #ddd;
+}
+

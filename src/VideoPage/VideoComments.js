@@ -1,18 +1,19 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { UserContext } from '../UserContext'; // Assuming you have a UserContext
 import './VideoComments.css';
+import { CiEdit } from "react-icons/ci";
+import { MdDeleteOutline } from "react-icons/md";
+
 function VideoComments({ videoId }) {
     const { user } = useContext(UserContext);
     const [comments, setComments] = useState(() => {
-        // Load comments from sessionStorage
         const savedComments = sessionStorage.getItem(`comments_${videoId}`);
         return savedComments ? JSON.parse(savedComments) : [];
     });
     const [newComment, setNewComment] = useState('');
-    const [editingIndex, setEditingIndex] = useState(-1);  // Track the index of the comment being edited
+    const [editingIndex, setEditingIndex] = useState(-1);
 
     useEffect(() => {
-        // Save comments to sessionStorage whenever they change
         sessionStorage.setItem(`comments_${videoId}`, JSON.stringify(comments));
     }, [comments, videoId]);
 
@@ -21,13 +22,14 @@ function VideoComments({ videoId }) {
         const commentData = {
             text: newComment,
             author: user.username,
+            avatar: user.avatar,
             date: new Date().toLocaleDateString()
         };
 
         if (editingIndex >= 0) {
             const updatedComments = comments.map((comment, index) => index === editingIndex ? commentData : comment);
             setComments(updatedComments);
-            setEditingIndex(-1); // Reset editing index
+            setEditingIndex(-1);
         } else {
             setComments([...comments, commentData]);
         }
@@ -47,26 +49,39 @@ function VideoComments({ videoId }) {
     return (
         <div className="comments-section">
             <h3>Comments</h3>
+            <hr className="divider" />
             {comments.map((comment, index) => (
                 <div key={index} className="comment">
-                    <p><strong>{comment.author}</strong> ({comment.date}): {comment.text}</p>
+                    <div className="comment-header">
+                        <img src={comment.avatar} alt="avatar" className="comment-avatar" />
+                        <div className="comment-author">
+                            <strong>{comment.author}</strong>
+                            <span className="comment-date">{comment.date}</span>
+                        </div>
+                    </div>
+                    <div className="comments-text-actions">
+                    <span className="comment-text">{comment.text}</span>
                     {user && user.username === comment.author && (
-                        <div>
-                            <button onClick={() => handleEdit(index)}>Edit</button>
-                            <button onClick={() => handleDelete(index)}>Delete</button>
+                        <div className="comment-actions">
+                            <CiEdit onClick={() => handleEdit(index)}/>
+                            <MdDeleteOutline onClick={() => handleDelete(index)}/>
                         </div>
                     )}
+                    </div>
                 </div>
             ))}
             {user && (
-                <form onSubmit={handleAddOrEditComment}>
-                    <textarea
+                <form onSubmit={handleAddOrEditComment} className="comment-form">
+                    <input
+                        type="text"
                         value={newComment}
                         onChange={(e) => setNewComment(e.target.value)}
                         placeholder="Add a comment..."
-                        required
-                    ></textarea>
-                    <button type="submit">{editingIndex >= 0 ? 'Update Comment' : 'Add Comment'}</button>
+                        className="comment-area"
+                    ></input>
+                    <button type="submit" className="comment-submit">
+                        {editingIndex >= 0 ? 'Update Comment' : 'Comment'}
+                    </button>
                 </form>
             )}
         </div>

@@ -13,23 +13,15 @@ function SignIn() {
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
     const { setUser } = useUser();
-    const [menuOpen, setMenuOpen] = useState(false);
-    const toggleMenu = () => {
-      setMenuOpen(!menuOpen);
-    };
     const handleSignIn = (e) => {
         e.preventDefault();
         const users = JSON.parse(sessionStorage.getItem('users')) || [];
         const user = users.find(u => u.username === username && u.password === password);
 
         if (user) {
-            console.log('Login successful');
-            setUser(user);
-            sessionStorage.setItem('username', username);
-            sessionStorage.setItem('password', password);
+            setUser(user); 
             navigate('/'); // Redirect to home or dashboard page
         } else {
-            console.log('Login failed');
             alert('Invalid credentials');
         }
     };
@@ -38,17 +30,6 @@ function SignIn() {
 
     return (
         <div className="screen-1">
-                         <div> 
- <button className="menu-toggle" onClick={toggleMenu}>
- ☰
-</button>
-<div className={`left-menu-in ${menuOpen ? 'close' : 'open'}`}>
-<Sidebar/>
-</div>
-<div className={`left-menu ${menuOpen ? 'open' : 'close'}`}>
- <LeftMenu />
-</div>
-</div>
             <form onSubmit={handleSignIn}>
                 <Logo />
                 <div className="email">
@@ -78,7 +59,7 @@ function SignIn() {
                 </div>
                 <button type="submit" className="login">Login</button>
                 <div className="footer">
-                    <span onClick={() => navigate('/registr')}>Sign up</span>
+                    <span onClick={() => navigate('/registr')} >Sign up</span>
                     <span >Forgot Password?</span>
                 </div>
             </form>

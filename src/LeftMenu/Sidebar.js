@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 import './Sidebar.css'; // Assuming you have some CSS for styling
 import { FaHome, FaUser } from 'react-icons/fa';
 import { MdExplore, MdSubscriptions, MdAssignmentInd } from 'react-icons/md';

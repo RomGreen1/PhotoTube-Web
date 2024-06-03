@@ -1,7 +1,6 @@
 import React, { createContext } from 'react';
 
 const videoData = [
-    
         {
           "id": 1,
           "title": "play 1",

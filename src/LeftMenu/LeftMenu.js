@@ -1,7 +1,9 @@
-import React from 'react';
+import React , { useContext }from 'react';
 import './LeftMenu.css';
 import { FaHome, FaUser } from 'react-icons/fa';
-import { MdExplore, MdSubscriptions, MdAssignmentInd } from 'react-icons/md';
+import { MdOutlineDarkMode, MdDarkMode, MdExplore, MdSubscriptions, MdAssignmentInd } from 'react-icons/md';
+import { DarkModeContext } from '../DarkModeContext';
+
 import { FiLogIn, FiLogOut } from "react-icons/fi";
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../UserContext';
@@ -9,7 +11,7 @@ import { useUser } from '../UserContext';
 function LeftMenu({ isOpen }) {
     const navigate = useNavigate();
     const { user, logout } = useUser();
-
+    const { darkMode, toggleDarkMode } = useContext(DarkModeContext);
     const handleLogout = () => {
         logout();
         navigate('/');
@@ -21,6 +23,11 @@ function LeftMenu({ isOpen }) {
                 <li>
                     <div className="icon-container" onClick={() => navigate('/')}>
                         <FaHome size={20} /><span>Home</span>
+                    </div>
+                </li>
+                   <li>
+                    <div className="icon-container" onClick={toggleDarkMode}>
+                    {darkMode ? <MdOutlineDarkMode size={20} /> : <MdDarkMode size={20} />}<span>{darkMode ? 'Dark' : 'Light'}</span>
                     </div>
                 </li>
                 <li>

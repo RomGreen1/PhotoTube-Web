@@ -17,9 +17,12 @@ function SignIn() {
         e.preventDefault();
         const users = JSON.parse(sessionStorage.getItem('users')) || [];
         const user = users.find(u => u.username === username && u.password === password);
+
         if (user) {
             console.log('Login successful');
             setUser(user);
+            sessionStorage.setItem('username', username);
+            sessionStorage.setItem('password', password);
             navigate('/'); // Redirect to home or dashboard page
         } else {
             console.log('Login failed');

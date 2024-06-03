@@ -1,0 +1,48 @@
+/* VideoComments.css */
+.comments-section {
+    overflow-y: auto;
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f8f9fa; /* Light grey background */
+    border: 1px solid #dee2e6; /* Bootstrap's border color */
+    border-radius: 0.25rem; /* Rounded corners */
+}
+
+.comments-section h3 {
+    color: #495057; /* Dark grey text */
+}
+
+.comment {
+    overflow-y: auto;
+    margin-top: 10px;
+    padding: 10px;
+    background-color: white;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+}
+
+.comment p {
+    margin-bottom: 0;
+    color: #212529; /* Bootstrap dark text color */
+}
+
+textarea {
+    width: 100%;
+    margin-top: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+}
+
+button {
+    margin-top: 10px;
+    padding: 5px 15px;
+    background-color: #007bff; /* Bootstrap primary button color */
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3; /* Darken button on hover */
+}

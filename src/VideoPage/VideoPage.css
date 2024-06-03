@@ -28,6 +28,7 @@
 }
 
 .main-content {
+  overflow-y: auto;
   display: flex;
   width: 100%;
   justify-content: space-between;

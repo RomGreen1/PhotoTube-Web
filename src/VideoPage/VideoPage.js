@@ -2,120 +2,178 @@ import React, { useEffect, useState, useContext, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { VideoContext } from '../Videos/VideoContext';
 import VideoList from '../Videos/VideoList';
-import LeftMenu from '../LeftMenu/LeftMenu';
-import Sidebar from '../LeftMenu/Sidebar';
-import SearchBar from '../SearchBar/SearchBar';
 import './VideoPage.css';
 import VideoComments from './VideoComments';
 import { useUser } from '../UserContext';
 
-
+import { AiOutlineLike, AiTwotoneLike, AiOutlineDislike, AiTwotoneDislike } from "react-icons/ai";
+import VideoListRightList from '../Videos/VideoListRightText';
 
 
 
 function VideoPage() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const { user } = useUser();
   const { id } = useParams();
   const videoData = useContext(VideoContext);
-  const [menuOpen, setMenuOpen] = useState(false);
   const [videoList, setVideoList] = useState([]);
   const videoRef = useRef(null);
-  const [likes, setLikes] = useState(() => {
-    const initialLikes = sessionStorage.getItem(`likes_${id}`) || 0;
-    return parseInt(initialLikes, 10);
-  });
-
-
-  const doSearch = (q) => {
-    setVideoList(videoData.filter((video) => video.title.includes(q)));
-  };
-
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
-  };
-
+  const [likes, setLikes] = useState(0);
+  
+  const [hasLiked,setHasLiked] = useState(false);
+  const [hasDisLiked,setHasDisLiked] = useState(false);
+  
   const navigate = useNavigate();
-  const videoC = videoData.find(v => v.id === parseInt(id))
-
+  const videoC = videoData.find(v => v.id === parseInt(id));
+  if (!videoC) {
+    navigate('/'); // Navigate to Home page if video is not found
+  }
   useEffect(() => {
-    if (!videoC) {
-      navigate('/'); // Navigate to Home page if video is not found
-    } else {
-      setVideoList(videoData.filter(video => video.id !== videoC.id));
-      if (videoRef.current) {
-        videoRef.current.muted = true;
-        videoRef.current.play().catch((error) => {
-          console.error('Auto-play failed:', error);
-        });
-      }
+    const initialLikes = Number(sessionStorage.getItem(`likes_${id}`)) || 0;
+    setLikes(initialLikes);
+    if (user) {
+      const hasLikedKey = `hasLiked_${id}_${user.username}`;
+      const likedStatus = sessionStorage.getItem(hasLikedKey);
+      const hasDisLikedKey = `hasdisLiked_${id}_${user.username}`;
+      const likedDisStatus = sessionStorage.getItem(hasDisLikedKey);
+      setHasLiked(!!likedStatus);
+      setHasDisLiked(!!likedDisStatus);
+    }
+ 
+    setVideoList(videoData.filter(video => video.id !== videoC.id));
+    if (videoRef.current) {
+      videoRef.current.src = videoC.videoUrl;
+      videoRef.current.load();
+      videoRef.current.play().catch((error) => {
+        console.error('Auto-play failed:', error);
+      });
     }
   }, [videoC, navigate, videoData, id]);
 
-  const handleLike = () => {
-    const users = JSON.parse(sessionStorage.getItem('users')) || [];
-    const currentUser = users.find(u => u.username === username && u.password === password);
 
-    console.log(currentUser)
 
-    if (!currentUser) {
+  const handleLike = (value) => {
+    if (!user) {
       alert("You must be logged in to like videos.");
       return;
     }
-
-    const hasLikedKey = `hasLiked_${id}_${currentUser.username}`;
+    const hasLikedKey = `hasLiked_${id}_${user.username}`;
     const hasLiked = sessionStorage.getItem(hasLikedKey);
-
-    if (!hasLiked) {
-      const newLikes = likes + 1;
-      setLikes(newLikes);
-      sessionStorage.setItem(`likes_${id}`, newLikes.toString());
-      sessionStorage.setItem(hasLikedKey, 'true'); // Set flag indicating this user has liked this video
-    } else {
-      alert("You have already liked this video.");
+    const hasDisLikedKey = `hasdisLiked_${id}_${user.username}`;
+    const hasDisLiked = sessionStorage.getItem(hasDisLikedKey);
+    let newLikes=0;
+    if (value === 1) {
+      sessionStorage.setItem(`hasLiked_${id}`, newLikes.toString());
+      if(hasDisLiked)
+        {
+          newLikes = likes + 2;      
+          sessionStorage.removeItem(hasDisLikedKey);
+          setHasDisLiked(false);
+        }
+        else
+        {
+          newLikes = likes + 1;   
+        }
+        setLikes(newLikes);  
+        sessionStorage.setItem(`likes_${id}`, newLikes.toString());
+        sessionStorage.setItem(hasLikedKey, 'true');
+        setHasLiked(true);
+    
     }
+    else
+    {
+      newLikes = likes + 1;
+      setLikes(newLikes);   
+      sessionStorage.setItem(`likes_${id}`, newLikes.toString());
+      sessionStorage.removeItem(hasDisLikedKey);
+      setHasDisLiked(false);
+    }
+    
   };
 
-  if (!videoC) {
-    return null; // Return null while redirecting
-  }
+  const handleDislike = (value) => {
+    if (!user) {
+      alert("You must be logged in to like videos.");
+      return;
+    }
+    const hasLikedKey = `hasLiked_${id}_${user.username}`;
+    const hasLiked = sessionStorage.getItem(hasLikedKey);
+    const hasDisLikedKey = `hasdisLiked_${id}_${user.username}`;
+    const hasDisLiked = sessionStorage.getItem(hasDisLikedKey);
+    let newLikes=0;
+    if (value === 2) {
+      sessionStorage.setItem(`hasdisLiked_${id}`, newLikes.toString());
+      if(hasLiked)
+        {
+          newLikes = likes - 2;      
+          sessionStorage.removeItem(hasLikedKey);
+          setHasLiked(false);
+        }
+        else
+        {
+          newLikes = likes - 1;   
+        }
+        sessionStorage.setItem(hasDisLikedKey, 'true');
+        setHasDisLiked(true);
+    
+    }
+    else
+    {
+      newLikes = likes - 1;
+      sessionStorage.removeItem(hasLikedKey);
+      setHasLiked(false);
+    }
+    setLikes(newLikes);   
+    sessionStorage.setItem(`likes_${id}`, newLikes.toString());
+  };
+
+
+  
 
   return (
-      <div className='video-page'>
-        <button className="menu-toggle" onClick={toggleMenu}>
-          ☰
-        </button>
-        <div className={`left-menu-in ${menuOpen ? 'open' : 'close'}`}>
-          <Sidebar />
-        </div>
-        <div className={`left-menu ${menuOpen ? 'open' : 'close'}`}>
-          <LeftMenu />
-        </div>
-        <div className='div-do-search'>
-          <SearchBar doSearch={doSearch} />
-        </div>
-        <div className='main-content'>
-          <div className='video-page-item'>
-            <div className="video-player">
-              <video ref={videoRef} controls muted autoPlay>
-                <source src={videoC.videoUrl} type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-            </div>
-            <div className="video-details">
-              <h1>{videoC.title}</h1>
-              <p>Author: {videoC.author}</p>
-              <p>{videoC.views} views - {videoC.time}</p>
-              <button className="btn btn-primary" onClick={handleLike}>Like</button>
-              <span> {likes} Likes</span>
-            </div>
-            <VideoComments videoId={videoC.id} />
+    <div className='video-page'>
+      <div className='main-content'>
+        <div className='video-page-item'>
+          <div className="video-player">
+            <video ref={videoRef} controls muted autoPlay>
+              <source src={videoC.videoUrl} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
           </div>
-          <div className="video-bar">
-            <VideoList videos={videoList} />
+          <div className="video-details">
+            <span className='video-title'>{videoC.title}</span>
+            <div className='video-img-dir'>
+              <div>
+            <img className='video-img' src={videoC.img}></img><span> {videoC.author}</span>
+            </div>
+            <div className="like-dislike-container">
+            <div className="like-dislike-button">
+                {hasLiked ? 
+                  <AiTwotoneLike size={20} onClick={() => handleDislike(1)} /> : 
+                  <AiOutlineLike size={20} onClick={() => handleLike(1)} />}
+                <span>{likes}</span>
+              </div>
+              <div className="separator"></div>
+              <div className="like-dislike-button">
+              {hasDisLiked ? 
+                  <AiTwotoneDislike size={20} onClick={() => handleLike(2)} /> : 
+                  <AiOutlineDislike size={20} onClick={() => handleDislike(2)} />}
+              </div>
+              
+            </div>
+            </div>
+          <div className='views-time'>
+          <span>{videoC.views} views - {videoC.time}</span>
           </div>
+          
+           
+          </div>
+          <VideoComments videoId={videoC.id} />
+        </div>
+        <div className="video-bar">
+          <VideoListRightList videos={videoList} />
         </div>
       </div>
+    </div>
   );
 }
 

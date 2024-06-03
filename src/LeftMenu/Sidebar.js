@@ -1,13 +1,16 @@
-import React from 'react';
+import React,{useContext} from 'react';
 
 
 import './Sidebar.css'; // Assuming you have some CSS for styling
 import { FaHome, FaUser } from 'react-icons/fa';
-import { MdExplore, MdSubscriptions, MdAssignmentInd } from 'react-icons/md';
+import { MdExplore, MdSubscriptions, MdAssignmentInd ,MdOutlineDarkMode,MdDarkMode} from 'react-icons/md';
 import { FiLogIn, FiLogOut } from "react-icons/fi";
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../UserContext';
+import { DarkModeContext } from '../DarkModeContext';
+
 function Sidebar() {
+  const { darkMode, toggleDarkMode } = useContext(DarkModeContext);
     const navigate = useNavigate();
     const { user, logout } = useUser();
     const handleLogout = () => {
@@ -23,6 +26,9 @@ function Sidebar() {
           </a>
           <span>Home</span>
         </li>
+        <li onClick={toggleDarkMode}>
+                 <a>   {darkMode ? <MdOutlineDarkMode size={20} /> : <MdDarkMode size={20} />}</a><span>{darkMode ? 'Dark' : 'Light'}</span>
+                </li>
         <li>
           <a>
             <MdExplore size={20} />

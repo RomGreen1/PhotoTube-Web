@@ -8,28 +8,18 @@ import SearchBar from '../SearchBar/SearchBar';
 
 function HomePage() {
 const videoData = useContext(VideoContext);
-  const [menuOpen, setMenuOpen] = useState(false);
+ 
   const [videoList, setVideoList] = useState(videoData);
 
   const doSearch = function (q) {
     setVideoList(videoData.filter((video) => video.title.includes(q)));
   }
   
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
-  };
+
 
   return (
     <div className="home">
-        <button className="menu-toggle" onClick={toggleMenu}>
-        ☰
-      </button>
-      <div className={`left-menu-in ${menuOpen ? 'close' : 'open'}`}>
-      <Sidebar/>
-      </div>
-      <div className={`left-menu ${menuOpen ? 'open' : 'close'}`}>
-        <LeftMenu />
-      </div>
+    
         <div className='div-do-search'>
         <SearchBar doSearch={doSearch} />
         </div>

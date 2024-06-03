@@ -1,17 +1,15 @@
-
+// RegistrPage.js
 import { useNavigate } from 'react-router-dom';
-import { useUser } from '../UserContext'; // Adjust the import path as needed
+import { useUser } from '../UserContext';
 import 'material-design-iconic-font/dist/css/material-design-iconic-font.min.css';
 import './RegisterPage.css';
-import React, { useState , useContext} from 'react';
-import LeftMenu from '../LeftMenu/LeftMenu'; 
-import Sidebar from '../LeftMenu/Sidebar';
+import React, { useState } from 'react';
 
 function RegisterPage() {
-    const {user,setUser } = useUser();
+    const { user, setUser } = useUser();
     const navigate = useNavigate();
-    if(user){
- navigate('/');
+    if (user) {
+        navigate('/');
     }
 
     const [formData, setFormData] = useState({
@@ -24,8 +22,8 @@ function RegisterPage() {
         confirmPassword: '',
         picture: null,
     });
-   
-    const [imagePreviewUrl, setImagePreviewUrl] = useState(null); // New state for storing image preview URL
+
+    const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
 
     const handleChange = (event) => {
         const { name, value, files } = event.target;
@@ -50,7 +48,7 @@ function RegisterPage() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const { firstName, lastName, username, email, gender, password, confirmPassword, picture } = formData;
+        const { firstName, lastName, username, email, gender, password, confirmPassword } = formData;
 
         if (password !== confirmPassword) {
             alert('Passwords do not match');
@@ -67,31 +65,11 @@ function RegisterPage() {
         sessionStorage.setItem('users', JSON.stringify(currentUsers));
 
         console.log('Account created successfully', newUser);
-        navigate('/signin');  // Redirect to sign-in page after account creation
+        navigate('/signin');
     };
 
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
-  };
     return (
-     
         <div className="wrapper">
-              <div> 
-  <button className="menu-toggle" onClick={toggleMenu}>
-  ☰
- </button>
- <div className={`left-menu-in ${menuOpen ? 'close' : 'open'}`}>
- <Sidebar/>
- </div>
- <div className={`left-menu ${menuOpen ? 'open' : 'close'}`}>
-  <LeftMenu />
- </div>
- 
- 
- 
-  </div>
             <div className="inner">
                 <form className='register-form' onSubmit={handleSubmit}>
                     <h3>Registration Form</h3>
@@ -170,7 +148,7 @@ function RegisterPage() {
                         />
                         <i className="zmdi zmdi-lock"></i>
                     </div>
-                    <div>
+                    <div className="form-wrapper">
                         <input
                             type="file"
                             name="picture"
@@ -180,9 +158,9 @@ function RegisterPage() {
                             <img
                                 src={imagePreviewUrl}
                                 alt="Preview"
-                                style={{ width: '100px', height: '100px' }}
+                                style={{ width: '100px', height: '100px', borderRadius: '50%', marginTop: '10px' }}
                             />
-                        )} {/* Image preview */}
+                        )}
                     </div>
                     <button className='register-button' type="submit">
                         Register

@@ -1,11 +1,3 @@
-:root {
-    --primary-color: hsl(213deg 85% 97%);
-    --secondary-color: hsl(233deg 36% 38%);
-    --shadow-color: hsl(231deg 62% 94%);
-    --text-color: hsl(0deg 0% 30%);
-    --input-text-color: hsl(0deg 0% 30%);
-    --background-color: #dde5f4;
-}
 
 * {
     font-family: 'Poppins', sans-serif;
@@ -101,7 +93,7 @@ body {
 
 button,
 input {
-    cursor: pointer;
+    cursor: auto;
     font-family: 'Poppins', sans-serif;
     font-size: 100%;
     line-height: 1.15;
@@ -116,6 +108,8 @@ input {
 }
 
 .show-hide {
-    cursor: pointer;
+    cursor: auto;
     margin-left: 0.5em; /* Adjust spacing as needed */
 }
+
+

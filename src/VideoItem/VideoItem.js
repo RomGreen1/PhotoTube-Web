@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import './VideoItem.css'; // Assuming you have some CSS for styling
+import './VideoItem.css';
 
 function VideoItem({ video }) {
   const navigate = useNavigate();

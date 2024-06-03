@@ -5,11 +5,8 @@ import VideoList from '../Videos/VideoList';
 import './VideoPage.css';
 import VideoComments from './VideoComments';
 import { useUser } from '../UserContext';
-
 import { AiOutlineLike, AiTwotoneLike, AiOutlineDislike, AiTwotoneDislike } from "react-icons/ai";
 import VideoListRightList from '../Videos/VideoListRightText';
-
-
 
 function VideoPage() {
   const { user } = useUser();
@@ -47,7 +44,7 @@ function VideoPage() {
         console.error('Auto-play failed:', error);
       });
     }
-  }, [videoC, navigate, videoData, id]);
+  }, [id, navigate]);
 
 
 
@@ -125,9 +122,6 @@ function VideoPage() {
     setLikes(newLikes);   
     sessionStorage.setItem(`likes_${id}`, newLikes.toString());
   };
-
-
-  
 
   return (
     <div className='video-page'>

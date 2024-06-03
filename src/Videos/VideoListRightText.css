@@ -1,0 +1,4 @@
+.video-list-right {
+    display: flex;
+    flex-wrap: wrap;
+}

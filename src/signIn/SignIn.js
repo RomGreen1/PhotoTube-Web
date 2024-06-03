@@ -19,13 +19,9 @@ function SignIn() {
         const user = users.find(u => u.username === username && u.password === password);
 
         if (user) {
-            console.log('Login successful');
-            setUser(user);
-            sessionStorage.setItem('username', username);
-            sessionStorage.setItem('password', password);
+            setUser(user); 
             navigate('/'); // Redirect to home or dashboard page
         } else {
-            console.log('Login failed');
             alert('Invalid credentials');
         }
     };

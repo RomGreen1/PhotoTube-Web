@@ -1,14 +1,14 @@
 // AppContent.js
 import React, { useEffect, useContext,useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import SignIn from '../signIn/SignIn';
+import SignIn from '../signin/SignIn';
 import RegisterPage from '../registration/RegistrPage.js';
-import AddVideo from '../videoPage/addVideo/AddVideo.js';
+import AddVideo from '../videopage/addVideo/AddVideo.js';
 import HomePage from '../home/Home.js';
-import VideoPage from '../videoPage/VideoPage.js';
+import VideoPage from '../videopage/VideoPage.js';
 import { DarkModeContext } from '../context/DarkModeContext';
-import LeftMenu from '../leftMenu/LeftMenu.js';
-import Sidebar from '../leftMenu/Sidebar.js'; // Assuming you have a Sidebar component
+import LeftMenu from '../leftmenu/LeftMenu.js';
+import Sidebar from '../leftmenu/Sidebar.js'; // Assuming you have a Sidebar component
 import './App.css';
 import './AppContent.css';
 

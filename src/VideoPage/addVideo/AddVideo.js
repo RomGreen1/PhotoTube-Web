@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-function AddVideo() {
+import { useUser } from '../../context/UserContext';
+function AddVideo() { 
+    const navigate = useNavigate();
     const [videoDetails, setVideoDetails] = useState({
         title: '',
         author: '',
@@ -10,7 +11,7 @@ function AddVideo() {
         img: null,
         videoFile: null
     });
-    const navigate = useNavigate();
+ 
 
     const handleInputChange = (event) => {
         setVideoDetails({ ...videoDetails, [event.target.name]: event.target.value });

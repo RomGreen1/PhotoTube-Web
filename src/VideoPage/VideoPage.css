@@ -8,7 +8,7 @@
 
 .video-page-item {
   width: 100%;
-  margin: 3vh 0 30px 0vh;
+  margin: 3vh 0 30px 20vh;
 }
 
 .video-player-page {
@@ -17,8 +17,8 @@
 /*880d490*/
 .video-player-page video {
   border-radius: 10px;
-  width: 55em;
-  height: 47vh;
+  width: 70em;
+  height: 60vh;
   object-fit: cover;
 }
 

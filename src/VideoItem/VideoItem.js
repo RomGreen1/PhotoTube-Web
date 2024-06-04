@@ -11,21 +11,25 @@ function VideoItem({ video }) {
 
   return (
     <div className="video-item" onClick={handleVideoClick}>
-      <div className="video">
-        <video >
-          <source src={video.videoUrl} type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-      </div>
-      <div>
-        {/* <img src={video.img} alt={video.title} /> */}
-        <span>{video.title}</span>
-      </div>
-      <div>
-        <p>{video.author}</p>
-        <p>{video.views} views - {video.time}</p>
+    <div className="video">
+      <video>
+        <source src={video.videoUrl} type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+    </div>
+    <div className="">
+      <div className="video-meta">
+        <img className='video-img' src={video.img} alt={video.title} />
+        <div className="video-info">
+          <span className="video-title">{video.title}</span>
+           <span className="video-author">{video.author}</span>
+          <span className="video-date">{video.views} views - {video.time}</span>
+        </div>
       </div>
     </div>
+  </div>
+  
+  
   );
 }
 

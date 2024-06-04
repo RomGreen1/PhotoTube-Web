@@ -19,11 +19,13 @@
     flex-direction: column;
     margin-bottom: 8px;
     text-align: center;
+    cursor: pointer;
   }
   
   .sidebar li div.icon-container {
     border-radius: 10px;
     padding: 8px;
+    
     transition: background-color 0.3s, box-shadow 0.3s;
   }
   

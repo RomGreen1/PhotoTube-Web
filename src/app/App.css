@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400&display=swap');
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  overflow: auto;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+}
+
+body {
+  transition: background-color 0.3s, color 0.3s;
+}
+
+
+body.light-mode {
+
+  --background-color: #fff;
+ --title-video-home-color: #555;
+  --menu-hover:#fcf8f8;
+  --text-color: #000;
+  --btn-hover: green;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  /* only for sign in */
+  --primary-color: hsl(213deg 85% 97%);
+  --secondary-color: hsl(233deg 36% 38%);
+  --shadow-color: hsl(231deg 62% 94%);
+  --text-color-sign: hsl(0deg 0% 30%);
+  --input-text-color: hsl(0deg 0% 30%);
+  
+}
+
+body.dark-mode  {
+  --background-color: #333;
+  --text-color: #fff;
+  --menu-hover:#3d3636;
+--btn-hover:grey;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  --title-video-home-color: white;
+  /* only for sign in */
+  --primary-color: #333;
+  --secondary-color: grey;
+  --shadow-color: rgba(255, 255, 255, 0.1);
+  --input-text-color: #ccc;
+  
+}
+

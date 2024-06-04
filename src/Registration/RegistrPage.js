@@ -1,6 +1,6 @@
 // RegistrPage.js
 import { useNavigate } from 'react-router-dom';
-import { useUser } from '../UserContext';
+import { useUser } from '../context/UserContext';
 import 'material-design-iconic-font/dist/css/material-design-iconic-font.min.css';
 import './RegisterPage.css';
 import React, { useState } from 'react';

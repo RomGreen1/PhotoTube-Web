@@ -1,17 +1,16 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { VideoContext } from '../Videos/VideoContext';
-import VideoList from '../Videos/VideoList';
+import { VideoContext } from '../context/VideoContext';
+import videoss from '../videos/videos_db.json';
 import './VideoPage.css';
-import VideoComments from './VideoComments';
-import { useUser } from '../UserContext';
+import VideoComments from './videoComments/VideoComments.js';
+import { useUser } from '../context/UserContext';
 import { AiOutlineLike, AiTwotoneLike, AiOutlineDislike, AiTwotoneDislike } from "react-icons/ai";
-import VideoListRightList from '../Videos/VideoListRightText';
+import VideoListRightList from '../videos/VideoListRightText.js'
 
 function VideoPage() {
   const { user } = useUser();
   const { id } = useParams();
-  const videoData = useContext(VideoContext);
   const [videoList, setVideoList] = useState([]);
   const videoRef = useRef(null);
   const [likes, setLikes] = useState(0);
@@ -20,9 +19,9 @@ function VideoPage() {
   const [hasDisLiked,setHasDisLiked] = useState(false);
   
   const navigate = useNavigate();
-  const videoC = videoData.find(v => v.id === parseInt(id));
+  const videoC = videoss.find(v => v.id === parseInt(id));
   if (!videoC) {
-    navigate('/'); // Navigate to Home page if video is not found
+    navigate('/'); // Navigate to Home pag;e if video is not found
   }
   useEffect(() => {
     const initialLikes = Number(sessionStorage.getItem(`likes_${id}`)) || 0;
@@ -36,7 +35,7 @@ function VideoPage() {
       setHasDisLiked(!!likedDisStatus);
     }
  
-    setVideoList(videoData.filter(video => video.id !== videoC.id));
+    setVideoList(videoss.filter(video => video.id !== videoC.id));
     if (videoRef.current) {
       videoRef.current.src = videoC.videoUrl;
       videoRef.current.load();
@@ -127,17 +126,19 @@ function VideoPage() {
     <div className='video-page'>
       <div className='main-content'>
         <div className='video-page-item'>
-          <div className="video-player">
+          <div className="video-player-page">
+           
             <video ref={videoRef} controls muted autoPlay>
               <source src={videoC.videoUrl} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
+        
           </div>
-          <div className="video-details">
-            <span className='video-title'>{videoC.title}</span>
-            <div className='video-img-dir'>
+          <div className="video-details-page">
+            <span className='video-title-page'>{videoC.title}</span>
+            <div className='video-img-dir-page'>
               <div>
-            <img className='video-img' src={videoC.img}></img><span> {videoC.author}</span>
+            <img className='video-img-page' src={videoC.img}></img><span> {videoC.author}</span>
             </div>
             <div className="like-dislike-container">
             <div className="like-dislike-button">
@@ -158,10 +159,12 @@ function VideoPage() {
           <div className='views-time'>
           <span>{videoC.views} views - {videoC.time}</span>
           </div>
-          
-           
-          </div>
+          <div className="video-comments-page">
           <VideoComments videoId={videoC.id} />
+          </div>
+          </div>
+
+          
         </div>
         <div className="video-bar">
           <VideoListRightList videos={videoList} />

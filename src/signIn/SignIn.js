@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './SignIn.css';
-import { useUser } from '../UserContext';
+import { useUser } from '../context/UserContext';
 import Logo from '../Icons/Logo'
 import MailIcon from '../Icons/MailIcon'
 import PasswordIcon from '../Icons/PasswordIcon'
-import LeftMenu from '../LeftMenu/LeftMenu';
-import Sidebar from '../LeftMenu/Sidebar';
 function SignIn() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');

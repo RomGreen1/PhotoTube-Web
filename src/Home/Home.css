@@ -1,9 +1,21 @@
+.home {
+    display: flex;
+    flex-direction: column;
+    height: 100%;/* Enable scrolling within the home component */
+}
 
-
-.home .div-do-search{
+.div-do-search {
     margin-top: 1vh;
 }
 
+.add-video {
+    margin-top: 1vh;
+}
 
-
-
+.content {
+    flex-grow: 1;
+    height: 100%;/* Enable vertical scrolling */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}

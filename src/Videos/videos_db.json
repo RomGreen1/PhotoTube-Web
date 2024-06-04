@@ -5,8 +5,8 @@
       "author": "nba",
       "views": 100,
       "time": "1 year",
-      "img": "./VideoImages/photo1.jpg",
-      "videoUrl": "./MPS/play1.mp4"
+      "img": "/VideoImages/photo1.jpg",
+      "videoUrl": "/MPS/play1.mp4"
     },
     {
       "id": 2,
@@ -14,8 +14,8 @@
       "author": "nba",
       "views": 1500,
       "time": "2 years",
-      "img": "./VideoImages/photo2.jpg",
-      "videoUrl": "./MPS/play2.mp4"
+      "img": "/VideoImages/photo2.jpg",
+      "videoUrl": "/MPS/play2.mp4"
     },
     {
       "id": 3,
@@ -23,8 +23,8 @@
       "author": "nba",
       "views": 10000,
       "time": "5 months",
-      "img": "./VideoImages/photo3.jpg",
-      "videoUrl": "./MPS/play3.mp4"
+      "img": "/VideoImages/photo3.jpg",
+      "videoUrl": "/MPS/play3.mp4"
     },
     {
       "id": 4,
@@ -32,8 +32,8 @@
       "author": "nba",
       "views": 1000,
       "time": "7 months",
-      "img": "./VideoImages/photo4.jpg",
-      "videoUrl": "./MPS/play4.mp4"
+      "img": "/VideoImages/photo4.jpg",
+      "videoUrl": "/MPS/play4.mp4"
     },
     {
       "id": 5,
@@ -41,8 +41,8 @@
       "author": "nba",
       "views": 1000,
       "time": "7 months",
-      "img": "./VideoImages/photo5.jpg",
-"videoUrl": "./MPS/play5.mp4"
+      "img": "/VideoImages/photo5.jpg",
+"videoUrl": "/MPS/play5.mp4"
     },
     {
       "id": 6,
@@ -50,8 +50,8 @@
       "author": "nba",
       "views": 1500,
       "time": "2 years",
-      "img": "./VideoImages/photo6.jpg",
-      "videoUrl": "./MPS/play6.mp4"
+      "img": "/VideoImages/photo6.jpg",
+      "videoUrl": "/MPS/play6.mp4"
     },
     {
       "id": 7,
@@ -59,8 +59,8 @@
       "author": "nba",
       "views": 1500,
       "time": "2 years",
-      "img": "./VideoImages/photo7.jpg",
-      "videoUrl": "./MPS/play7.mp4"
+      "img": "/VideoImages/photo7.jpg",
+      "videoUrl": "/MPS/play7.mp4"
     },
     {
       "id": 8,
@@ -68,8 +68,8 @@
       "author": "nba",
       "views": 1500,
       "time": "2 years",
-      "img": "./VideoImages/photo8.jpg",
-      "videoUrl": "./MPS/play8.mp4"
+      "img": "/VideoImages/photo8.jpg",
+      "videoUrl": "/MPS/play8.mp4"
     },
     {
       "id": 9,
@@ -77,8 +77,8 @@
       "author": "nba",
       "views": 1500,
       "time": "2 years",
-      "img": "./VideoImages/photo9.jpg",
-      "videoUrl": "./MPS/play9.mp4"
+      "img": "/VideoImages/photo9.jpg",
+      "videoUrl": "/MPS/play9.mp4"
     },
     {
       "id": 10,
@@ -86,8 +86,110 @@
       "author": "nba",
       "views": 1500,
       "time": "2 years",
-      "img": "./VideoImages/photo10.jpg",
-      "videoUrl": "./MPS/play10.mp4"
+      "img": "/VideoImages/photo10.jpg",
+      "videoUrl": "/MPS/play10.mp4"
     }
+    ,
+    {
+      "id": 11,
+      "title": "Stereo Love",
+      "author": "Edward maya",
+      "views": 222,
+      "time": "22 years",
+      "img": "/VideoImages/Edward_maya_stereo_love_cover.jpg",
+      "videoUrl": "/MPS/StereoLove.mp4"
+    },
+    {
+      "id": 12,
+      "title": "Rockabay",
+      "author": "Clean Bandit",
+      "views": 100000,
+      "time": "4 years",
+      "img": "/VideoImages/rockabay.jpg",
+      "videoUrl": "/MPS/CleanBandit.mp4"
+    }
+    ,
+    {
+      "id": 13,
+      "title": "Not Around Me",
+      "author": "Denis Lloyd",
+      "views": 34,
+      "time": "2 months",
+      "img": "/VideoImages/notaroundme.jpg",
+      "videoUrl": "/MPS/DennisLloyd.mp4"
+    }
+    ,
+    {
+      "id": 14,
+      "title": "Reasons",
+      "author": "Denis Lloyd",
+      "views": 150000,
+      "time": "5 years",
+      "img": "/VideoImages/reasons.jpg",
+      "videoUrl": "/MPS/DennisLloydReasons.mp4"
+    }
+    ,
+    {
+      "id": 15,
+      "title": "Don't You Worry Child",
+      "author": "Some One",
+      "views": 150000,
+      "time": "22 years",
+      "img": "/VideoImages/dontyouworrychild.jpg",
+      "videoUrl": "/MPS/Don'tYouWorryChild.mp4"
+    }
+    ,
+    {
+      "id": 16,
+      "title": "Down",
+      "author": "Jay Sean",
+      "views": 134565,
+      "time": "32 years",
+      "img": "/VideoImages/jay_sean_feat_lil_wayne_down.jpg",
+      "videoUrl": "/MPS/Down.mp4"
+    }
+    ,
+    {
+      "id": 17,
+      "title": "Give Me Every Thing Tonight",
+      "author": "Pitbull",
+      "views": 1321321,
+      "time": "23 years",
+      "img": "/VideoImages/give_me_every_thing_pitbull.jpg",
+      "videoUrl": "/MPS/GiveMeEverything.mp4"
+    }
+    ,
+    {
+      "id": 18,
+      "title": "Californication",
+      "author": "RedHotChiliPeppers",
+      "views": 1543100,
+      "time": "4 months",
+      "img": "/VideoImages/RedHotChiliPeppersCalifornication.jpg",
+      "videoUrl": "/MPS/RedHotChiliPeppers-DaniCalifornia.mp4"
+    }
+    ,
+    {
+      "id": 19,
+      "title": "Locked Away",
+      "author": "Adam Levin",
+      "views": 1500516,
+      "time": "23 years",
+      "img": "/VideoImages/locked_away.jpg",
+      "videoUrl": "/MPS/LockedAway.mp4"
+    }
+    ,
+    {
+      "id": 20,
+      "title": "She Doesn't Mind",
+      "author": "Jay Sean",
+      "views": 1550,
+      "time": "23 years",
+      "img": "/VideoImages/She_Doesn't_Mind.jpg",
+      "videoUrl": "/MPS/SheDoesn'tMind.mp4"
+    }
+
+
+
   ]
   

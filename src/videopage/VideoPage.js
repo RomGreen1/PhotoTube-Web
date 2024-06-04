@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { VideoContext } from '../context/VideoContext';
 import videoss from '../videos/videos_db.json';
 import './VideoPage.css';
 import VideoComments from './videoComments/VideoComments.js';
@@ -19,10 +18,18 @@ function VideoPage() {
   const [hasDisLiked,setHasDisLiked] = useState(false);
   
   const navigate = useNavigate();
-  const videoC = videoss.find(v => v.id === parseInt(id));
-  if (!videoC) {
-    navigate('/'); // Navigate to Home pag;e if video is not found
+  const sessionVideos = JSON.parse(sessionStorage.getItem('videos')) || [];
+  let videoC;
+
+  if (sessionVideos && Array.isArray(sessionVideos)) {
+    videoC = sessionVideos.find(v => v.id === parseInt(id));
   }
+  
+  if (!videoC) {
+    videoC = videoss.find(v => v.id === parseInt(id));
+  }
+
+  console.log(videoC);
   useEffect(() => {
     const initialLikes = Number(sessionStorage.getItem(`likes_${id}`)) || 0;
     setLikes(initialLikes);

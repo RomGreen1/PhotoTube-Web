@@ -1,72 +1,79 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../context/UserContext';
-function AddVideo() { 
+import { RiVideoAddLine, RiImageAddLine } from "react-icons/ri";
+import { VideosContext } from '../../context/VideosContext';
+import './AddVideo.css'
+function AddVideo() {
+    const { user, setUser } = useUser();
+    const { addVideo } = useContext(VideosContext); // Access the addVideo function from the VideosContext
     const navigate = useNavigate();
-    const [videoDetails, setVideoDetails] = useState({
-        title: '',
-        author: '',
-        views: 0,
-        time: new Date().toLocaleString(),
-        img: null,
-        videoFile: null
-    });
- 
+    useEffect(() => {
 
-    const handleInputChange = (event) => {
-        setVideoDetails({ ...videoDetails, [event.target.name]: event.target.value });
-    };
-
-    const handleFileChange = (event) => {
-        if (event.target.name === 'videoFile') {
-            setVideoDetails({ ...videoDetails, videoFile: event.target.files[0], videoUrl: URL.createObjectURL(event.target.files[0]) });
-        } else if (event.target.name === 'img') {
-            setVideoDetails({ ...videoDetails, img: URL.createObjectURL(event.target.files[0]) });
+        if (!user) {
+            navigate('/');
         }
-    };
+
+    }, []);
 
     const handleSubmit = (event) => {
         event.preventDefault();
+    
+        // Extract data directly from DOM elements
+        const videoTitle = document.getElementById('videoTitle').value;
+        const authorName = document.getElementById('authorName').value;
+        const img2 = document.getElementById('thumbnailImage').files[0];
+        const videoFile2 = document.getElementById('videoFile').files[0];
+    
+        // Create a new video object
         const newVideo = {
-            id: Date.now(),
-            title: videoDetails.title,
-            author: videoDetails.author,
+            id: 16,
+            title: videoTitle,
+            author: authorName,
             views: 0,
             time: new Date().toLocaleString(),
-            img: videoDetails.img,
-            videoUrl: videoDetails.videoUrl
+            img: URL.createObjectURL(img2),
+            videoUrl: URL.createObjectURL(videoFile2)
         };
-
-        const existingVideos = JSON.parse(sessionStorage.getItem('new_videos')) || [];
-        existingVideos.push(newVideo);
-        sessionStorage.setItem('new_videos', JSON.stringify(existingVideos));
+        
+        // Call the addVideo function to add the new video
+        addVideo(newVideo);
 
         navigate('/');
     };
-
     return (
-        <div className="container mt-5">
-            <h2 className="mb-4">Add New Video</h2>
-            <form onSubmit={handleSubmit} className="needs-validation" noValidate>
-                <div className="mb-3">
-                    <label htmlFor="videoTitle" className="form-label">Video Title:</label>
-                    <input type="text" className="form-control" id="videoTitle" name="title" placeholder="Enter title" onChange={handleInputChange} required />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="authorName" className="form-label">Author:</label>
-                    <input type="text" className="form-control" id="authorName" name="author" placeholder="Author name" onChange={handleInputChange} required />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="videoFile" className="form-label">Video File:</label>
-                    <input type="file" className="form-control" id="videoFile" name="videoFile" accept="video/*" onChange={handleFileChange} required />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="thumbnailImage" className="form-label">Thumbnail Image:</label>
-                    <input type="file" className="form-control" id="thumbnailImage" name="img" accept="image/*" onChange={handleFileChange} required />
-                </div>
-                <button type="submit" className="btn btn-primary">Confirm Add</button>
-            </form>
+        <div className="wrapper-add-video">
+            <div className="inner-add-video">
+                <form onSubmit={handleSubmit} className="add-video-form " noValidate>
+                    <h3>Add New Video</h3>
+                    <div className="form-group-add-video">
+                        <label className="">Video Title:</label>
+                        <input type="text" className="form-input-add-video" id="videoTitle" name="videoTitle" />
+                    </div>
+                    <div className="form-group-add-video">
+                        <label className="">Author:</label>
+                        <input type="text" className="form-input-add-video" id="authorName" name="authorName"  />
+                    </div>
+                    <div className="form-group-add-video">
+                        <label className="">Video:</label>
+                        <input type="file" className="form-input-add-video" id="videoFile" accept="videoFile/*"  hidden />
+                     <label className="" for="videoFile"><RiVideoAddLine size={50} /></label>
+                        <span id="file-chosen-video">No file chosen</span>
+                    </div>
+                    <div className="form-group-add-video">
+                        <label className="">Image:</label>
+                        <input type="file" className="form-input-add-video" id="thumbnailImage" name="thumbnailImage" accept="image/*" hidden/>
+                        <label className="" for="thumbnailImage"><RiImageAddLine size={50} /></label>
+                        <span id="file-chosen-img">No file chosen</span>
+                    </div>
+                    <button type="submit" className="register-button-add-video">Confirm Add
+                        <i className="zmdi zmdi-arrow-right"></i>
+                    </button>
+                </form>
+            </div>
         </div>
+
+
     );
 }
 

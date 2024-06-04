@@ -1,6 +1,6 @@
 // VideoList.js
 import React from 'react';
-import VideoItem from '../videoItem/VideoItem.js';
+import VideoItem from '../videoitem/VideoItem.js';
 import './VideoList.css';
 
 function VideoList({ videos }) {

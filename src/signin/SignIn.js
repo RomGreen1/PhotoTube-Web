@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './SignIn.css';
 import { useUser } from '../context/UserContext';
-import Logo from '../Icons/Logo'
-import MailIcon from '../Icons/MailIcon'
-import PasswordIcon from '../Icons/PasswordIcon'
+import Logo from '../icons/Logo'
+import MailIcon from '../icons/MailIcon'
+import PasswordIcon from '../icons/PasswordIcon'
 function SignIn() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');

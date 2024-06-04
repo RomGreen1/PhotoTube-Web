@@ -2,7 +2,7 @@ import React, { useState , useContext, useEffect} from 'react';
 import './Home.css';
 import videoss from '../videos/videos_db.json'
 import VideoList from '../videos/VideoList';
-import SearchBar from '../searchBar/SearchBar';
+import SearchBar from '../searchbar/SearchBar';
 import { useNavigate } from 'react-router-dom';
 function HomePage() {
   const [videoList, setVideoList] = useState(videoss);

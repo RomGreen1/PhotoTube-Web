@@ -1,19 +1,138 @@
-.add-video-form {
-    margin: 20px;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
 
-.add-video-form form {
+
+body {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    height: 100vh;
+    margin: 0;
+    transition: background-color 0.3s, color 0.3s;
 }
 
-.add-video-form label {
-    margin-bottom: 10px;
+
+.wrapper-add-video {
+    display: flex;
+    width: 100%;
+    max-width: 600px;
+    background: var(--background-color);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+    align-items: center;
+    justify-content: center;
+    padding: 50px;
+    margin-top: 20vh;
+    border-radius: 10px;
+    transition: background-color 0.3s, box-shadow 0.3s;
 }
 
-.add-video-form input, .add-video-form button {
-    margin-top: 5px;
+.inner-add-video {
+    width: 100%;
+}
+
+.add-video-form {
+    width: 100%;
+    padding: 30px;
+}
+
+.add-video-form h3 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 30px;
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.form-group-add-video {
+    margin-bottom: 20px;
+    width: 100%;
+    margin-right: 5px;
+}
+.form-group-add-video label{
+    width:30%;
+}
+
+.form-group-add-video .form-input-add-video {
+    border: none;
+    width:70%;
+    border-bottom: 2px solid var(--text-color);
+    background: transparent;
+    outline: none;
+    transition: border-color 0.3s;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+}
+
+.form-group-add-video .form-input-add-video:focus {
+    border-bottom-color: var(--backgroud-color);
+}
+
+.form-wrapper-add-video {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.form-wrapper-add-video .form-input-add-video {
+    width: 100%;
+    padding: 10px 0;
+    border: none;
+    border-bottom: 2px solid var(--text-color);
+    background: transparent;
+    outline: none;
+    transition: border-color 0.3s;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+}
+
+.form-wrapper-add-video .form-input-add-video:focus {
+    border-bottom-color: var(--backgroud-color);
+}
+
+.form-wrapper-add-video i {
+    position: absolute;
+    top: 50%;
+    right: 3px;
+    transform: translateY(-50%);
+    color: var(--text-color);
+}
+
+.register-button-add-video {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background: var(--text-color);
+    color: var(--background-color);
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 20px 0;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+.register-button-add-video i {
+    margin-left: 10px;
+    font-size: 16px;
+}
+
+.register-button-add-video:hover {
+    background: var(--btn-hover);
+}
+
+.footer-add-video {
+    text-align: center;
+    font-size: 0.9em;
+    color: var(--text-color);
+    padding-top: 1em;
+    font-weight: 600;
+}
+
+.footer-add-video span {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.footer span:hover {
+    color: var(--text-color);
 }

@@ -36,12 +36,12 @@ function AppContent() {
         <LeftMenu />
       </div>
       <div id="Rou">
-            <Routes>
-                <Route path="/addvideo" element={<AddVideo />} />
+            <Routes>      
                 <Route path="/video/:id" element={<VideoPage />} />
                 <Route path="/" element={<HomePage />} />
                 <Route path="/signin" element={<SignIn />} />
                 <Route path="/register" element={<RegisterPage />} />
+                <Route path="/addvideo" element={<AddVideo />} />
             </Routes>
             </div>
         </div>

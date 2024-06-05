@@ -3,15 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
 import 'material-design-iconic-font/dist/css/material-design-iconic-font.min.css';
 import './RegisterPage.css';
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 
 function RegisterPage() {
-    const { user, setUser } = useUser();
+    const { user } = useUser();
     const navigate = useNavigate();
-    if (user) {
-        navigate('/');
-    }
-
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -22,6 +18,13 @@ function RegisterPage() {
         confirmPassword: '',
         picture: null,
     });
+    useEffect(() => {
+        if(user)
+            {
+                navigate('/');
+            }
+           
+      }, []);
 
     const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
 

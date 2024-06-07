@@ -65,6 +65,8 @@
     width: 100%;
     padding: 10px;
     border: 0;
+    background-color: var(--background-color);
+    color:var(--text-color);
     border-bottom: 1px solid #727171;
     resize: none;
     outline: none; /* Remove default outline on focus */
@@ -72,12 +74,12 @@
   }
   
   .comment-area:focus {
-    border-bottom: 2px solid black; /* Change the bottom border color on focus */
+    border-bottom: 2px solid var(--text-color); /* Change the bottom border color on focus */
   }
   
   .comment-submit {
-    color: #909090;
-    background-color: rgba(0, 0, 0, 0.05);
+    color:var(--commentcolor-button);
+    background-color:var(--commentbackcolor-button);
     align-self: flex-end;
     padding: 5px 10px;
     border: none;

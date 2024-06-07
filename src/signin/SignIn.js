@@ -1,25 +1,28 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './SignIn.css';
-import { useUser } from '../context/UserContext';
+import { UserContext } from '../context/UserContext';
+import {UsersContext, users} from '../context/UsersContext'
 import Logo from '../icons/Logo'
 import MailIcon from '../icons/MailIcon'
 import PasswordIcon from '../icons/PasswordIcon'
 function SignIn() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
-    const { setUser } = useUser();
+    const { login } = useContext(UserContext);
+    const{getUser} = useContext(UsersContext);
     const handleSignIn = (e) => {
         e.preventDefault();
-        const users = JSON.parse(sessionStorage.getItem('users')) || [];
-        const user = users.find(u => u.username === username && u.password === password);
-
-        if (user) {
-            setUser(user); 
+    
+        const existingUser = getUser(username);
+        
+        if (existingUser && existingUser.password === password ) {
+            login(existingUser); 
+          
             navigate('/'); // Redirect to home or dashboard page
         } else {
+           
             alert('Invalid credentials');
         }
     };
@@ -29,7 +32,9 @@ function SignIn() {
     return (
         <div className="screen-1">
             <form onSubmit={handleSignIn}>
+            <div className="logo-container">
                 <Logo />
+                </div>
                 <div className="email">
                     <label>Email Address</label>
                     <div className="sec-2">
@@ -47,7 +52,7 @@ function SignIn() {
                     <div className="sec-2">
                         <PasswordIcon />
                         <input
-                            type={showPassword ? "text" : "password"}
+                            type="password"
                             placeholder="············"
                             value={password}
                             onChange={e => setPassword(e.target.value)}

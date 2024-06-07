@@ -1,12 +1,14 @@
 // RegistrPage.js
 import { useNavigate } from 'react-router-dom';
-import { useUser } from '../context/UserContext';
+import { UsersContext  } from '../context/UsersContext';
+import { UserContext  } from '../context/UserContext';
 import 'material-design-iconic-font/dist/css/material-design-iconic-font.min.css';
 import './RegisterPage.css';
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 function RegisterPage() {
-    const { user } = useUser();
+    const { addUser,getUser } = useContext(UsersContext);
+    const {user} = useContext(UserContext);
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         firstName: '',
@@ -19,12 +21,11 @@ function RegisterPage() {
         picture: null,
     });
     useEffect(() => {
-        if(user)
-            {
-                navigate('/');
-            }
-           
-      }, []);
+        if (user) {
+            navigate('/');
+        }
+
+    }, []);
 
     const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
 
@@ -61,13 +62,13 @@ function RegisterPage() {
             alert('Password must be at least 8 characters and include both letters and digits.');
             return;
         }
-
+        const existingUser = getUser(username);
+        if (existingUser) {
+            alert('Username already exists');
+            return;
+        }
         const newUser = { username, password, name: `${firstName} ${lastName}`, picture: imagePreviewUrl };
-        const currentUsers = JSON.parse(sessionStorage.getItem('users')) || [];
-        currentUsers.push(newUser);
-        sessionStorage.setItem('users', JSON.stringify(currentUsers));
-
-        console.log('Account created successfully', newUser);
+        addUser(newUser);
         navigate('/signin');
     };
 

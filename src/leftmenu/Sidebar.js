@@ -5,38 +5,45 @@ import { FaHome, FaUser } from 'react-icons/fa';
 import { MdExplore, MdSubscriptions, MdAssignmentInd, MdOutlineDarkMode, MdDarkMode, MdAdd } from 'react-icons/md';
 import { FiLogIn, FiLogOut } from "react-icons/fi";
 import { useNavigate } from 'react-router-dom';
-import { useUser } from '../context/UserContext';
+import { UserContext } from '../context/UserContext';
 import { DarkModeContext } from '../context/DarkModeContext';
+import { SearchContext } from '../context/SearchContext';
 
 function Sidebar() {
   const { darkMode, toggleDarkMode } = useContext(DarkModeContext);
   const navigate = useNavigate();
-  const { user, logout } = useUser();
+  const { setSearchQuery } = useContext(SearchContext);
+  const { user, logout } = useContext(UserContext);
   const handleLogout = () => {
     logout();
     navigate('/');
   };
+  const resetSearchAndNavigateHome = () => {
+    setSearchQuery(''); // Reset the search query
+    navigate('/'); // Navigate to the home page
+  };
+
   return (
     <div className="sidebar">
       <ul>
-        <li onClick={() => navigate('/')}>
+        <li onClick={resetSearchAndNavigateHome}>
           <a>
-            <FaHome size={20} />
+            <FaHome className='icon' />
           </a>
           <span>Home</span>
         </li>
         <li onClick={toggleDarkMode}>
-          <a>   {darkMode ? <MdOutlineDarkMode size={20} /> : <MdDarkMode size={20} />}</a><span>{darkMode ? 'Dark' : 'Light'}</span>
+          <a>   {darkMode ? <MdOutlineDarkMode className='icon' /> : <MdDarkMode className='icon' />}</a><span>{darkMode ? 'Dark' : 'Light'}</span>
         </li>
         <li>
           <a>
-            <MdExplore size={20} />
+            <MdExplore className='icon' />
           </a>
           <span>Explore</span>
         </li>
         <li>
           <a>
-            <MdSubscriptions size={20} />
+            <MdSubscriptions className='icon' />
           </a>
           <span>Subscriptions</span>
         </li>
@@ -46,14 +53,14 @@ function Sidebar() {
 
         <li onClick={() => user ? handleLogout() : navigate('/signin')}>
 
-          <a> {user ? <FiLogOut size={20} /> : <FiLogIn size={20} />}</a>
+          <a> {user ? <FiLogOut className='icon' /> : <FiLogIn className='icon' />}</a>
           <span>{user ? 'Logout' : 'Login'}</span>
 
         </li>
         {!user && (
           <li onClick={() => navigate('/register')}>
 
-            <a><MdAssignmentInd size={20} /></a>
+            <a><MdAssignmentInd className='icon' /></a>
             <span>Register</span>
 
           </li>
@@ -61,12 +68,12 @@ function Sidebar() {
         {user && (
           <>
             <li>
-              <a><MdAdd size={20} onClick={() => navigate('/addvideo')}/> </a>
+              <a><MdAdd className='icon' onClick={() => navigate('/addvideo')}/> </a>
               <span>add Video</span>
             </li>
             <li>
               <div className="icon-container-user-info">
-                <img src={user.picture} alt="User" className="user-avatar" />
+                <img src={user.picture}  className="user-avatar" />
                 <span>{user.username}</span>
               </div>
             </li>

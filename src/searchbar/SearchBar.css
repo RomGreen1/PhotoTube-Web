@@ -1,33 +1,33 @@
 .search-container {
     display: flex;
     align-items: center;
-    border: 1px solid #ccc;
+    background: var(--background-color);
+    border: 1px solid var(--search-color);
     border-radius: 25px; /* Adjust the border-radius as needed */
     overflow: hidden;
     height: 3vh;
     width: 32em;
   }
   
-  .search-input {
+  .search-container input {
     border: none;
     padding: 10px;
+    background: var(--background-color);
+    color: var(--text-color);
     outline: none;
     flex: 1;
     font-size: 16px;
     border-radius: 25px 0 0 25px; /* Make sure to match the border-radius here */
   }
   
-  .search-button {
+  .search-container button {
     border: none;
-    background: white;
+    background: var(--background-color);
     padding: 10px 15px;
     cursor: pointer;
-    border-left: 1px solid #ccc;
+    color: var(--text-color);
+    border-left: 1px solid var(--search-color);
     border-radius: 0 25px 25px 0; /* Make sure to match the border-radius here */
   }
   
-  .search-button i {
-    font-size: 16px;
-    color: #333; /* Adjust the color as needed */
-  }
   

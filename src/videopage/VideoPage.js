@@ -1,182 +1,139 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import videoss from '../videos/videos_db.json';
+import { VideosContext } from '../context/VideosContext';
+import { UserContext } from '../context/UserContext';
+import { LikesContext } from '../context/LikesContext';
 import './VideoPage.css';
-import VideoComments from './videoComments/VideoComments.js';
-import { useUser } from '../context/UserContext';
+import VideoComments from './videoComments/VideoComments';
 import { AiOutlineLike, AiTwotoneLike, AiOutlineDislike, AiTwotoneDislike } from "react-icons/ai";
-import VideoListRightList from '../videos/VideoListRightText.js'
+import VideoListRightList from '../videos/VideoListRightText';
+import SearchBar from '../searchbar/SearchBar';
+import { LuFileEdit } from "react-icons/lu";
+import { MdOutlineDelete } from "react-icons/md";
+import ConfirmationModal from '../confirmModal/ConfirmationModal';
+import UpdateVideoModal from '../confirmModal/UpdateVideoModal';
+
 
 function VideoPage() {
-  const { user } = useUser();
+  const { user } = useContext(UserContext);
   const { id } = useParams();
+  const { videos, deleteVideo } = useContext(VideosContext);
+  const { likes, handleLike, handleDislike } = useContext(LikesContext);
   const [videoList, setVideoList] = useState([]);
   const videoRef = useRef(null);
-  const [likes, setLikes] = useState(0);
-  
-  const [hasLiked,setHasLiked] = useState(false);
-  const [hasDisLiked,setHasDisLiked] = useState(false);
-  
-  const navigate = useNavigate();
-  const sessionVideos = JSON.parse(sessionStorage.getItem('videos')) || [];
-  let videoC;
+  const [videoC, setVideoC] = useState(null);
+  const [currentLikes, setCurrentLikes] = useState(0);
+  const [hasLiked, setHasLiked] = useState(false);
+  const [hasDisLiked, setHasDisLiked] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [showUpdateModal, setShowUpdateModal] = useState(false); // Modal for updating video
 
-  if (sessionVideos && Array.isArray(sessionVideos)) {
-    videoC = sessionVideos.find(v => v.id === parseInt(id));
-  }
-  
-  if (!videoC) {
-    videoC = videoss.find(v => v.id === parseInt(id));
-  }
-
-  console.log(videoC);
   useEffect(() => {
-    const initialLikes = Number(sessionStorage.getItem(`likes_${id}`)) || 0;
-    setLikes(initialLikes);
-    if (user) {
-      const hasLikedKey = `hasLiked_${id}_${user.username}`;
-      const likedStatus = sessionStorage.getItem(hasLikedKey);
-      const hasDisLikedKey = `hasdisLiked_${id}_${user.username}`;
-      const likedDisStatus = sessionStorage.getItem(hasDisLikedKey);
-      setHasLiked(!!likedStatus);
-      setHasDisLiked(!!likedDisStatus);
+    const filteredVideos = videos.filter(v => v.id !== parseInt(id));
+    setVideoList(filteredVideos);
+    const foundVideo = videos.find(v => v.id === parseInt(id));
+    setVideoC(foundVideo);
+  }, [videos, id]);
+
+  useEffect(() => {
+    if (videoC) {
+      const videoLikes = likes.find(video => video.id === videoC.id) || { count: 0, likes: [], dislikes: [] };
+      setCurrentLikes(videoLikes.count);
+      setHasLiked(videoLikes.likes.includes(user?.username));
+      setHasDisLiked(videoLikes.dislikes.includes(user?.username));
     }
- 
-    setVideoList(videoss.filter(video => video.id !== videoC.id));
-    if (videoRef.current) {
+  }, [videoC, likes, user]);
+
+  useEffect(() => {
+    if (videoC && videoRef.current) {
       videoRef.current.src = videoC.videoUrl;
       videoRef.current.load();
-      videoRef.current.play().catch((error) => {
-        console.error('Auto-play failed:', error);
-      });
     }
-  }, [id, navigate]);
+  }, [videoC]);
 
 
-
-  const handleLike = (value) => {
-    if (!user) {
-      alert("You must be logged in to like videos.");
-      return;
-    }
-    const hasLikedKey = `hasLiked_${id}_${user.username}`;
-    const hasLiked = sessionStorage.getItem(hasLikedKey);
-    const hasDisLikedKey = `hasdisLiked_${id}_${user.username}`;
-    const hasDisLiked = sessionStorage.getItem(hasDisLikedKey);
-    let newLikes=0;
-    if (value === 1) {
-      sessionStorage.setItem(`hasLiked_${id}`, newLikes.toString());
-      if(hasDisLiked)
-        {
-          newLikes = likes + 2;      
-          sessionStorage.removeItem(hasDisLikedKey);
-          setHasDisLiked(false);
-        }
-        else
-        {
-          newLikes = likes + 1;   
-        }
-        setLikes(newLikes);  
-        sessionStorage.setItem(`likes_${id}`, newLikes.toString());
-        sessionStorage.setItem(hasLikedKey, 'true');
-        setHasLiked(true);
-    
-    }
-    else
-    {
-      newLikes = likes + 1;
-      setLikes(newLikes);   
-      sessionStorage.setItem(`likes_${id}`, newLikes.toString());
-      sessionStorage.removeItem(hasDisLikedKey);
-      setHasDisLiked(false);
-    }
-    
+  const openModal = () => {
+    setShowModal(true);
   };
 
-  const handleDislike = (value) => {
-    if (!user) {
-      alert("You must be logged in to like videos.");
-      return;
-    }
-    const hasLikedKey = `hasLiked_${id}_${user.username}`;
-    const hasLiked = sessionStorage.getItem(hasLikedKey);
-    const hasDisLikedKey = `hasdisLiked_${id}_${user.username}`;
-    const hasDisLiked = sessionStorage.getItem(hasDisLikedKey);
-    let newLikes=0;
-    if (value === 2) {
-      sessionStorage.setItem(`hasdisLiked_${id}`, newLikes.toString());
-      if(hasLiked)
-        {
-          newLikes = likes - 2;      
-          sessionStorage.removeItem(hasLikedKey);
-          setHasLiked(false);
-        }
-        else
-        {
-          newLikes = likes - 1;   
-        }
-        sessionStorage.setItem(hasDisLikedKey, 'true');
-        setHasDisLiked(true);
-    
-    }
-    else
-    {
-      newLikes = likes - 1;
-      sessionStorage.removeItem(hasLikedKey);
-      setHasLiked(false);
-    }
-    setLikes(newLikes);   
-    sessionStorage.setItem(`likes_${id}`, newLikes.toString());
+  const closeModal = () => {
+    setShowModal(false);
   };
 
+  const confirmDelete = () => {
+    deleteVideo(videoC.id);
+    closeModal();
+  };
+
+  const openUpdateModal = () => {
+    setShowUpdateModal(true);
+  };
+
+  const closeUpdateModal = () => {
+    setShowUpdateModal(false);
+  };
   return (
     <div className='video-page'>
+      <div className='div-do-search'>
+        <SearchBar />
+      </div>
       <div className='main-content'>
         <div className='video-page-item'>
-          <div className="video-player-page">
-           
-            <video ref={videoRef} controls muted autoPlay>
-              <source src={videoC.videoUrl} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-        
-          </div>
-          <div className="video-details-page">
-            <span className='video-title-page'>{videoC.title}</span>
-            <div className='video-img-dir-page'>
-              <div>
-            <img className='video-img-page' src={videoC.img}></img><span> {videoC.author}</span>
-            </div>
-            <div className="like-dislike-container">
-            <div className="like-dislike-button">
-                {hasLiked ? 
-                  <AiTwotoneLike size={20} onClick={() => handleDislike(1)} /> : 
-                  <AiOutlineLike size={20} onClick={() => handleLike(1)} />}
-                <span>{likes}</span>
+          {videoC && (
+            <>
+              <div className="video-player-page">
+                <video ref={videoRef} controls autoPlay>
+                  <source src={videoC.videoUrl} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
               </div>
-              <div className="separator"></div>
-              <div className="like-dislike-button">
-              {hasDisLiked ? 
-                  <AiTwotoneDislike size={20} onClick={() => handleLike(2)} /> : 
-                  <AiOutlineDislike size={20} onClick={() => handleDislike(2)} />}
-              </div>
-              
-            </div>
-            </div>
-          <div className='views-time'>
-          <span>{videoC.views} views - {videoC.time}</span>
-          </div>
-          <div className="video-comments-page">
-          <VideoComments videoId={videoC.id} />
-          </div>
-          </div>
 
-          
+              <div className="video-details-page">
+                <div className='video-img-dir-page'>
+                  <span className='video-title-page'>{videoC.title}</span>
+                  <div className='video-delete-update-icon'>
+                    <span className='span-margin'> <LuFileEdit  onClick={openUpdateModal} style={{ marginBottom: 1 }} /></span>
+                    <span> <MdOutlineDelete onClick={openModal} /></span>
+
+                  </div>
+
+                </div>
+
+                <div className='video-img-dir-page'>
+                  <div>
+                    <img className='video-img-page' src={videoC.img} alt="video thumbnail" /><span> {videoC.author}</span>
+                  </div>
+                  <div className="like-dislike-container">
+                    <div className="like-dislike-button">
+                      {hasLiked ?
+                        <AiTwotoneLike className='icon' onClick={() => handleLike(videoC.id)} /> :
+                        <AiOutlineLike className='icon' onClick={() => handleLike(videoC.id)} />}
+                      <span>{currentLikes}</span>
+                    </div>
+                    <div className="separator"></div>
+                    <div className="like-dislike-button">
+                      {hasDisLiked ?
+                        <AiTwotoneDislike className='icon' onClick={() => handleDislike(videoC.id)} /> :
+                        <AiOutlineDislike className='icon' onClick={() => handleDislike(videoC.id)} />}
+                    </div>
+                  </div>
+                </div>
+                <div className='views-time'>
+                  <span>{videoC.views} views - {videoC.time}</span>
+                </div>
+                <div className="video-comments-page">
+                  <VideoComments videoId={videoC.id} />
+                </div>
+              </div>
+            </>
+          )}
         </div>
         <div className="video-bar">
           <VideoListRightList videos={videoList} />
         </div>
       </div>
+      <ConfirmationModal show={showModal} onClose={closeModal} onConfirm={confirmDelete} />
+      <UpdateVideoModal show={showUpdateModal} onClose={closeUpdateModal} video={videoC} />
     </div>
   );
 }

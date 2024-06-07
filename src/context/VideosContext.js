@@ -1,37 +1,38 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState } from 'react';
+import jsonVideos from '../videos/videos_db.json';
+import { useNavigate } from 'react-router-dom';
 
 export const VideosContext = createContext();
 
 export const VideosProvider = ({ children }) => {
-  // Load videos from sessionStorage, assuming successful parsing
-  const initialVideos = JSON.parse(sessionStorage.getItem('videos')) || [];
-  const [videos, setVideos] = useState(initialVideos);
+  // Initialize videos state with data from jsonVideos
+  const [videos, setVideos] = useState(jsonVideos);
+  
+  // Initialize highestId state with the highest id from jsonVideos or default to 22
   const [highestId, setHighestId] = useState(() => {
-    const maxId = initialVideos.reduce((max, video) => (video.id > max ? video.id : max), 0);
-    return maxId || 22; // Set to 22 if no videos exist initially
+    const maxId = jsonVideos.reduce((max, video) => (video.id > max ? video.id : max), 0);
+    return maxId || 22;
   });
 
-  // Save videos to sessionStorage on change
-  useEffect(() => {
-    sessionStorage.setItem('videos', JSON.stringify(videos));
-  }, [videos]);
-
+  // Function to add a new video
   const addVideo = (video) => {
-    const newId = highestId + 1; // Generate a new ID by incrementing the highest used ID
-    setVideos((prevVideos) => [...prevVideos, { ...video, id: newId }]); // Taking the perv+new video and update his id
-    setHighestId(newId); // Update the highest used ID
+    const newId = highestId + 1;
+    setVideos((prevVideos) => [...prevVideos, { ...video, id: newId }]);
+    setHighestId(newId);
   };
 
-  //need to check
+  // Function to update an existing video
   const updateVideo = (updatedVideo) => {
     setVideos((prevVideos) =>
       prevVideos.map((video) => (video.id === updatedVideo.id ? updatedVideo : video))
     );
   };
-
-  //need to check
+  const navigate = useNavigate();
+  // Function to delete a video by id
   const deleteVideo = (videoId) => {
     setVideos((prevVideos) => prevVideos.filter((video) => video.id !== videoId));
+    navigate('/');
+    
   };
 
   return (

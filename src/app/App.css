@@ -21,6 +21,41 @@ body {
   transition: background-color 0.3s, color 0.3s;
 }
 
+:root {
+  --icon-size: 1.25rem;
+}
+
+.icon {
+  font-size: var(--icon-size);
+}
+
+/* Media query for smaller screens */
+@media (max-width: 767px) {
+  :root {
+    --icon-size: 0.5rem;
+  }
+}
+
+/* Media query for medium screens */
+@media (min-width: 768px) and (max-width: 1023px) {
+  :root {
+    --icon-size: 0.5rem;
+  }
+}
+
+/* Media query for larger screens */
+@media (min-width: 1024px) {
+  :root {
+    --icon-size: 0.8rem;
+  }
+}
+
+/* Media query for very large screens */
+@media (min-width: 1440px) {
+  :root {
+    --icon-size: 1.2rem;
+  }
+}
 
 body.light-mode {
 
@@ -28,7 +63,7 @@ body.light-mode {
  --title-video-home-color: #555;
   --menu-hover:#fcf8f8;
   --text-color: #000;
-  --btn-hover: green;
+  --btn-hover: grey;
   background-color: var(--background-color);
   color: var(--text-color);
   /* only for sign in */
@@ -37,22 +72,44 @@ body.light-mode {
   --shadow-color: hsl(231deg 62% 94%);
   --text-color-sign: hsl(0deg 0% 30%);
   --input-text-color: hsl(0deg 0% 30%);
+  --add-page-like-color: #f5f5f5;
+  /*search color*/
+  --search-color:#ccc;
+  /*update/delete buttons model*/
+  --ok-button:#5bc0de;
+  --cancel-button:#d9534f;
+  /*comment button*/
+  --commentcolor-button: #909090;
+  --commentbackcolor-button: rgba(0, 0, 0, 0.05);
+  /*addVideo-Button*/
+  --addvideobackground-button:#000;
+  --addvideocolor-button:white;
   
 }
 
 body.dark-mode  {
   --background-color: #333;
-  --text-color: #fff;
+  --text-color: #b9b9b9;
   --menu-hover:#3d3636;
---btn-hover:grey;
+  --btn-hover:grey;
   background-color: var(--background-color);
   color: var(--text-color);
-  --title-video-home-color: white;
+  --title-video-home-color: #b9b9b9;;
   /* only for sign in */
   --primary-color: #333;
   --secondary-color: grey;
   --shadow-color: rgba(255, 255, 255, 0.1);
   --input-text-color: #ccc;
-  
+  --add-page-like-color: #333;
+  --ok-button:#498394;
+  --cancel-button:#92504e;
+  --search-color:white;
+  /*comment button*/
+  --commentcolor-button:white;
+  --commentbackcolor-button: rgba(158, 155, 155, 0.05);
+   /*addVideo-Button*/
+   --addvideobackground-button:grey;
+   --addvideocolor-button:black;  
 }
+
 

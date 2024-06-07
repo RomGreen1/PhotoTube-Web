@@ -1,32 +1,28 @@
-import React, { useState} from 'react';
+import React, { useContext, useState} from 'react';
 import './Home.css';
-import videoss from '../videos/videos_db.json'
+import {VideosContext} from '../context/VideosContext'
 import VideoList from '../videos/VideoList';
 import SearchBar from '../searchbar/SearchBar';
+import { SearchContext } from '../context/SearchContext';
 import { useEffect } from 'react';
-
 function HomePage() {
-  const [videoList, setVideoList] = useState(videoss);
-  const doSearch = function (q) {
-    setVideoList(videoList.filter((video) => video.title.includes(q)));
-  }
+  const {videos} = useContext(VideosContext);
+  const [videoList, setVideoList] = useState([]);
+  const { searchQuery } = useContext(SearchContext);
 
   useEffect(() => {
-    // Retrieve videos from session storage
-    const sessionVideos = JSON.parse(sessionStorage.getItem('videos'))|| [];
-    // Check if sessionVideos is an array
-    
-      // Merge session storage videos with initial videos
-      const mergedVideos = [...videoList, ...sessionVideos];
-      // Set the merged videos as the new video list
-      setVideoList(mergedVideos);
-    
-  }, []);
+    if (!searchQuery) {
+      setVideoList(videos);
+    } else {
+      setVideoList(videos.filter((video) => video.title.toLowerCase().includes(searchQuery.toLowerCase())));
+    }
+  }, [searchQuery]);
+
 
   return (
     <div className="home">
         <div className='div-do-search'>
-        <SearchBar doSearch={doSearch} />
+        <SearchBar />
         </div>
       <div className="content">
         <VideoList  videos={videoList} />

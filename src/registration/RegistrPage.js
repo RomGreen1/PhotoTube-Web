@@ -22,7 +22,7 @@ function RegisterPage() {
     });
     useEffect(() => {
         if (user) {
-            navigate('/');
+            navigate('/signin');
         }
 
     }, []);
@@ -54,19 +54,32 @@ function RegisterPage() {
         e.preventDefault();
         const { firstName, lastName, username, email, gender, password, confirmPassword } = formData;
 
-        if (password !== confirmPassword) {
-            alert('Passwords do not match');
-            return;
-        }
-        if (password.length < 8 || !/\d/.test(password) || !/[a-zA-Z]/.test(password)) {
-            alert('Password must be at least 8 characters and include both letters and digits.');
-            return;
-        }
-        const existingUser = getUser(username);
-        if (existingUser) {
-            alert('Username already exists');
-            return;
-        }
+            // Check if all fields are filled
+            if (!firstName || !lastName || !username || !email || !gender || !password || !confirmPassword || !formData.picture ) {
+                alert('You have to fill all the fields.');
+                return;
+            }
+            // check password == confirm password
+            if (password !== confirmPassword) {
+                alert('Passwords do not match');
+                return;
+            }
+            // Validation for username length
+            if (username.length < 4) {
+                alert('Username must be at least 4 characters long.');
+                return;
+            }
+    
+            // Validation for password complexity
+            if (!password.match(/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/)) {
+                alert('Password must contain at least 1 number and 1 letter.');
+                return;
+            }
+            // check if password has at least 8 characters and include both letters and digits.
+            if (password.length < 8 || !/\d/.test(password) || !/[a-zA-Z]/.test(password)) {
+                alert('Password must be at least 8 characters and include both letters and digits.');
+                return;
+            }
         const newUser = { username, password, name: `${firstName} ${lastName}`, picture: imagePreviewUrl };
         addUser(newUser);
         navigate('/signin');

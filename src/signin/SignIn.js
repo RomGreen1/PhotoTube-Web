@@ -14,7 +14,11 @@ function SignIn() {
     const{getUser} = useContext(UsersContext);
     const handleSignIn = (e) => {
         e.preventDefault();
-    
+         // Check if username or password are empty
+         if (!username || !password) {
+            alert('fields cannot be empty.');
+            return;
+        }
         const existingUser = getUser(username);
         
         if (existingUser && existingUser.password === password ) {

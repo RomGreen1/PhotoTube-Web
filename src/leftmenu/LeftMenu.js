@@ -15,7 +15,6 @@ function LeftMenu({ isOpen }) {
     const { darkMode, toggleDarkMode } = useContext(DarkModeContext);
     const handleLogout = () => {
         logout();
-        navigate('/');
     };
 
     const resetSearchAndNavigateHome = () => {

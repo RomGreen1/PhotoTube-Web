@@ -16,7 +16,6 @@ function Sidebar() {
   const { user, logout } = useContext(UserContext);
   const handleLogout = () => {
     logout();
-    navigate('/');
   };
   const resetSearchAndNavigateHome = () => {
     setSearchQuery(''); // Reset the search query

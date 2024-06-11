@@ -1,27 +1,18 @@
 import React, { createContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  const [formData, setFormData] = useState({
-    id: 1,
-    firstName: 'dsa',
-    lastName: 'dsa',
-    username: 'DDDD',
-    email: 'dsa',
-    gender: 'dsa',
-    password: 'dsa',
-    confirmPassword: 'dsa',
-    picture: null,
-});
-  const [user, setUser] = useState(formData);
+  const [user, setUser] = useState(null);
 
   const login = (userData) => {
     setUser(userData);
   };
-
+ const navigate = useNavigate();
   const logout = () => {
     setUser(null);
+    navigate('/signin');
   };
 
   return (

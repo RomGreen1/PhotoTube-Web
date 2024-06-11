@@ -12,6 +12,9 @@ import { LuFileEdit } from "react-icons/lu";
 import { MdOutlineDelete } from "react-icons/md";
 import ConfirmationModal from '../confirmModal/ConfirmationModal';
 import UpdateVideoModal from '../confirmModal/UpdateVideoModal';
+import ShareModal from '../confirmModal/ShareModal';
+import { GoShare } from "react-icons/go";
+
 
 
 function VideoPage() {
@@ -26,7 +29,8 @@ function VideoPage() {
   const [hasLiked, setHasLiked] = useState(false);
   const [hasDisLiked, setHasDisLiked] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [showUpdateModal, setShowUpdateModal] = useState(false); // Modal for updating video
+  const [showUpdateModal, setShowUpdateModal] = useState(false); 
+  const [showShareModal, setShareShowModal] = useState(false);
 
   useEffect(() => {
     const filteredVideos = videos.filter(v => v.id !== parseInt(id));
@@ -53,6 +57,11 @@ function VideoPage() {
 
 
   const openModal = () => {
+    if (!user) {
+      alert("You must be logged in to delete videos.");
+      return;
+    }
+
     setShowModal(true);
   };
 
@@ -66,11 +75,20 @@ function VideoPage() {
   };
 
   const openUpdateModal = () => {
+    if (!user) {
+      alert("You must be logged in to update videos.");
+      return;
+    }
+
     setShowUpdateModal(true);
   };
 
   const closeUpdateModal = () => {
     setShowUpdateModal(false);
+  };
+
+  const toggleModal = () => {
+    setShareShowModal(!showShareModal);
   };
   return (
     <div className='video-page'>
@@ -90,8 +108,10 @@ function VideoPage() {
 
               <div className="video-details-page">
                 <div className='video-img-dir-page'>
-                  <span className='video-title-page'>{videoC.title}</span>
+                  <span className='video-title-page'>{videoC.title} </span>
+                  
                   <div className='video-delete-update-icon'>
+                  <span className='span-margin'><GoShare size={30}  onClick={toggleModal}/></span>
                     <span className='span-margin'> <LuFileEdit  onClick={openUpdateModal} style={{ marginBottom: 1 }} /></span>
                     <span> <MdOutlineDelete onClick={openModal} /></span>
 
@@ -134,6 +154,7 @@ function VideoPage() {
       </div>
       <ConfirmationModal show={showModal} onClose={closeModal} onConfirm={confirmDelete} />
       <UpdateVideoModal show={showUpdateModal} onClose={closeUpdateModal} video={videoC} />
+      <ShareModal show={showShareModal} handleClose={toggleModal} />
     </div>
   );
 }

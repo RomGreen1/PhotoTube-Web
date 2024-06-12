@@ -6,15 +6,23 @@ import { MdDeleteOutline, MdCancelPresentation } from "react-icons/md";
 import { BiCommentCheck, BiCommentX, BiCommentEdit, BiShare } from "react-icons/bi";
 
 function VideoComments({ videoId }) {
+    // Get the user from the UserContext
     const { user } = useContext(UserContext);
+    // Get comments and comment management functions from the CommentsContext
     const { comments, addComment, updateComment, deleteComment } = useContext(CommentsContext);
+    // Initialize newComment state for adding a new comment
     const [newComment, setNewComment] = useState('');
+    // Initialize editComment state for editing a comment
     const [editComment, setEditComment] = useState('');
+    // Initialize editingIndex state to keep track of the comment being edited
     const [editingIndex, setEditingIndex] = useState(-1);
+    // Initialize editing state to toggle editing mode
     const [editing, setEditing] = useState(false);
 
+    // Get the comments for the specific video
     const videoComments = comments[videoId] || [];
 
+    // Function to handle adding a new comment
     const handleAddComment = () => {
         if (!newComment.trim()) {
             alert('Please write something before submitting.');
@@ -28,10 +36,11 @@ function VideoComments({ videoId }) {
             date: new Date().toLocaleDateString()
         };
 
-        addComment(videoId, commentData);
-        setNewComment('');
+        addComment(videoId, commentData); // Add the comment
+        setNewComment(''); // Clear the newComment state
     };
 
+    // Function to handle updating a comment
     const handleUpdateComment = () => {
         if (!editComment.trim()) {
             alert('Please write something before updating.');
@@ -45,31 +54,34 @@ function VideoComments({ videoId }) {
             date: new Date().toLocaleDateString()
         };
 
-        updateComment(videoId, editingIndex, commentData);
-        setEditingIndex(-1);
-        setEditing(false);
-        setEditComment('');
+        updateComment(videoId, editingIndex, commentData); // Update the comment
+        setEditingIndex(-1); // Reset editing index
+        setEditing(false); // Exit editing mode
+        setEditComment(''); // Clear the editComment state
     };
 
+    // Function to handle editing a comment
     const handleEdit = (index) => {
-        setEditing(true);
-        setEditingIndex(index);
-        setEditComment(videoComments[index].text);
+        setEditing(true); // Enter editing mode
+        setEditingIndex(index); // Set the index of the comment being edited
+        setEditComment(videoComments[index].text); // Set the text of the comment being edited
     };
 
+    // Function to handle deleting a comment
     const handleDelete = (index) => {
-        deleteComment(videoId, index);
+        deleteComment(videoId, index); // Delete the comment
         if (editingIndex === index) {
-            setEditingIndex(-1);
-            setEditing(false);
-            setEditComment('');
+            setEditingIndex(-1); // Reset editing index if the deleted comment was being edited
+            setEditing(false); // Exit editing mode
+            setEditComment(''); // Clear the editComment state
         }
     };
 
+    // Function to cancel editing a comment
     const cancelEdit = () => {
-        setEditingIndex(-1);
-        setEditing(false);
-        setEditComment('');
+        setEditingIndex(-1); // Reset editing index
+        setEditing(false); // Exit editing mode
+        setEditComment(''); // Clear the editComment state
     };
 
     return (
@@ -128,7 +140,7 @@ function VideoComments({ videoId }) {
                     </button>
                 </form>
             )}
-            <div style={{height:"30px"}}></div>
+            <div style={{ height: "30px" }}></div> {/* Spacer div */}
         </div>
     );
 }

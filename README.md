@@ -1,70 +1,65 @@
-# Getting Started with Create React App
+# Introduction
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+We started our project with one partner who created the basic components. Later, the second partner joined the mission. One partner focused on the logic and CSS, while the other worked on the logic and importing videos, images, and other assets.
 
-## Available Scripts
+## Project Structure
 
-In the project directory, you can run:
+Our project is structured around several Contexts that provide a Provider to control the web application, all managed using `useState`. Here's an overview of each Context:
 
-### `npm start`
+### DarkModeContext
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Purpose**: Controls whether the CSS is in light mode or dark mode.
+- **Implementation**: We manage the CSS using color variables, allowing us to switch styles and colors for dark mode seamlessly.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### UsersContext
 
-### `npm test`
+- **Purpose**: Manages user states for the current session.
+- **Implementation**: 
+  - During registration, it checks for existing usernames.
+  - On the login page, it verifies the username and password.
+  - It saves the logged-in user to provide different features based on login status.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### SearchContext
 
-### `npm run build`
+- **Purpose**: Manages the state of the search bar for videos.
+- **Implementation**: Allows the search bar to retain its state across different pages, making it accessible anywhere in the app.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### VideosContext
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- **Purpose**: Manages all videos in the project.
+- **Implementation**: 
+  - Includes JSON videos that users can control by deleting or editing within the session state.
+  - Provides a function to add videos.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### LikesContext
 
-### `npm run eject`
+- **Purpose**: Manages the likes system for each video.
+- **Implementation**: Tracks and saves likes for each video and checks if a user has liked a video.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### CommentsContext
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- **Purpose**: Manages comments for each video.
+- **Implementation**: 
+  - Uses an array of arrays to handle comments for each video.
+  - Tracks who wrote each comment.
+  - Allows users to add, delete, or edit comments based on permissions.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Project Organization
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+We organized the project into various directories, each containing CSS and JS files. We created specific CSS files for each page, with some shared CSS files, and we ensured the design is responsive for different resolutions.
 
-## Learn More
+## Learning Experience
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Throughout the project, we learned the entire workflow, how `useState` works, the syntax of React, and how to write and use functions. We also studied how to integrate JavaScript and HTML within React.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Website Functionality
 
-### Code Splitting
+- **Home Page**: Displays all videos on the website with a left navigation bar for easy access.
+- **User Interaction**: 
+  - Initially, users see the login and register options.
+  - Registered users can log in to access additional features such as adding, liking, commenting on, and editing videos.
+- **Video Page**: Allows users to view videos without additional features when not logged in.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Conclusion
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+We implemented everything using React and are proud of our work. We learned a lot about web development and how to create functional and dynamic web applications. Thank you for this learning opportunity.

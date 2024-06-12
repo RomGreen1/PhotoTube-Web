@@ -15,23 +15,35 @@ import UpdateVideoModal from '../confirmModal/UpdateVideoModal';
 import ShareModal from '../confirmModal/ShareModal';
 import { GoShare } from "react-icons/go";
 
-
-
 function VideoPage() {
+  // Get user from UserContext
   const { user } = useContext(UserContext);
+  // Get video id from URL parameters
   const { id } = useParams();
+  // Get videos and deleteVideo function from VideosContext
   const { videos, deleteVideo } = useContext(VideosContext);
+  // Get likes, handleLike, and handleDislike functions from LikesContext
   const { likes, handleLike, handleDislike } = useContext(LikesContext);
+  // Initialize videoList state as an empty array
   const [videoList, setVideoList] = useState([]);
+  // Create a reference for the video element
   const videoRef = useRef(null);
+  // Initialize videoC state as null (current video)
   const [videoC, setVideoC] = useState(null);
+  // Initialize currentLikes state to keep track of likes count
   const [currentLikes, setCurrentLikes] = useState(0);
+  // Initialize hasLiked state to check if the user has liked the video
   const [hasLiked, setHasLiked] = useState(false);
+  // Initialize hasDisLiked state to check if the user has disliked the video
   const [hasDisLiked, setHasDisLiked] = useState(false);
+  // Initialize showModal state to manage confirmation modal visibility
   const [showModal, setShowModal] = useState(false);
-  const [showUpdateModal, setShowUpdateModal] = useState(false); 
+  // Initialize showUpdateModal state to manage update modal visibility
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  // Initialize showShareModal state to manage share modal visibility
   const [showShareModal, setShareShowModal] = useState(false);
 
+  // Effect to filter out the current video from the video list and set the current video
   useEffect(() => {
     const filteredVideos = videos.filter(v => v.id !== parseInt(id));
     setVideoList(filteredVideos);
@@ -39,6 +51,7 @@ function VideoPage() {
     setVideoC(foundVideo);
   }, [videos, id]);
 
+  // Effect to set current likes and like/dislike states when videoC or likes change
   useEffect(() => {
     if (videoC) {
       const videoLikes = likes.find(video => video.id === videoC.id) || { count: 0, likes: [], dislikes: [] };
@@ -48,6 +61,7 @@ function VideoPage() {
     }
   }, [videoC, likes, user]);
 
+  // Effect to set the video source when videoC changes
   useEffect(() => {
     if (videoC && videoRef.current) {
       videoRef.current.src = videoC.videoUrl;
@@ -55,7 +69,7 @@ function VideoPage() {
     }
   }, [videoC]);
 
-
+  // Function to open the delete confirmation modal
   const openModal = () => {
     if (!user) {
       alert("You must be logged in to delete videos.");
@@ -65,15 +79,18 @@ function VideoPage() {
     setShowModal(true);
   };
 
+  // Function to close the delete confirmation modal
   const closeModal = () => {
     setShowModal(false);
   };
 
+  // Function to confirm video deletion
   const confirmDelete = () => {
     deleteVideo(videoC.id);
     closeModal();
   };
 
+  // Function to open the update modal
   const openUpdateModal = () => {
     if (!user) {
       alert("You must be logged in to update videos.");
@@ -83,13 +100,16 @@ function VideoPage() {
     setShowUpdateModal(true);
   };
 
+  // Function to close the update modal
   const closeUpdateModal = () => {
     setShowUpdateModal(false);
   };
 
+  // Function to toggle the share modal
   const toggleModal = () => {
     setShareShowModal(!showShareModal);
   };
+
   return (
     <div className='video-page'>
       <div className='div-do-search'>
@@ -111,12 +131,10 @@ function VideoPage() {
                   <span className='video-title-page'>{videoC.title} </span>
                   
                   <div className='video-delete-update-icon'>
-                  <span className='span-margin'><GoShare size={30}  onClick={toggleModal}/></span>
-                    <span className='span-margin'> <LuFileEdit  onClick={openUpdateModal} style={{ marginBottom: 1 }} /></span>
-                    <span> <MdOutlineDelete onClick={openModal} /></span>
-
+                    <span className='span-margin'><GoShare size={30} onClick={toggleModal}/></span>
+                    <span className='span-margin'><LuFileEdit onClick={openUpdateModal} style={{ marginBottom: 1 }} /></span>
+                    <span><MdOutlineDelete onClick={openModal} /></span>
                   </div>
-
                 </div>
 
                 <div className='video-img-dir-page'>

@@ -6,23 +6,35 @@ import SearchBar from '../searchbar/SearchBar';
 import { SearchContext } from '../context/SearchContext';
 
 function HomePage() {
-  // Get videos from VideosContext
-  const { videos } = useContext(VideosContext);
+
+  
   // Initialize videoList state as an empty array
   const [videoList, setVideoList] = useState([]);
+  const [filteredVideos, setFilteredVideos] = useState([]);
   // Get search query from SearchContext
   const { searchQuery } = useContext(SearchContext);
 
-  // Update videoList based on searchQuery
+ 
+  useEffect(() => {
+    const fetchVideos = async () => {
+      const response = await fetch('http://localhost:1324/api/videos');
+      const videosData = await response.json();
+      setVideoList(videosData);
+      setFilteredVideos(videosData); 
+    };
+
+    fetchVideos();
+  }, []);
+
   useEffect(() => {
     if (!searchQuery) {
-      setVideoList(videos); // If no search query, set videoList to all videos
+      setFilteredVideos(videoList); 
     } else {
-      setVideoList(videos.filter((video) =>
+      setFilteredVideos(videoList.filter((video) =>
         video.title.toLowerCase().includes(searchQuery.toLowerCase())
-      )); // Filter videos based on search query
+      )); 
     }
-  }, [searchQuery, videos]); // Dependencies are searchQuery and videos
+  }, [searchQuery, videoList]); 
 
   return (
     <div className="home">

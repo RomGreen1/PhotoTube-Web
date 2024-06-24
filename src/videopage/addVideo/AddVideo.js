@@ -20,22 +20,42 @@ function AddVideo() {
         }
     }, [user, navigate]);
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
     
         const newVideo = {
-            id: 22, // Example ID, replace with your ID generation logic
-            title: videoTitle,
-            author: authorName,
-            views: 0,
-            time: new Date().toLocaleString(),
-            img: thumbnailImage ? URL.createObjectURL(thumbnailImage) : '',
-            videoUrl: videoFile ? URL.createObjectURL(videoFile) : '',
+          title: videoTitle,
+          author: user.username,
+          likes: 0,
+          views: 0,
+          date: new Date().toLocaleString(),
+          imageUrl: thumbnailImage ? URL.createObjectURL(thumbnailImage) : '',
+          videoUrl: videoFile ? URL.createObjectURL(videoFile) : '',
         };
-        
-        addVideo(newVideo);
-        navigate('/');
-    };
+    
+        try {
+          const userId = localStorage.getItem('userId');
+          const response = await fetch(`http://localhost:1324/api/users/${userId}/videos`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newVideo),
+          });
+          const data = await response.json();
+    
+          if (response.ok) {
+            alert('Add successful!');
+            navigate('/');
+          } else {
+            console.error('Adding error:', data);
+            alert('An error occurred. Please try again.');
+          }
+        } catch (error) {
+          console.error('There was an error!', error);
+          alert('An error occurred. Please try again.');
+        }
+      };
 
     return (
         <div className="add-video-container">

@@ -170,7 +170,7 @@ function VideoPage() {
           <VideoListRightList videos={videoList} />
         </div>
       </div>
-      <ConfirmationModal show={showModal} onClose={closeModal} onConfirm={confirmDelete} />
+      <ConfirmationModal show={showModal} onClose={closeModal} onConfirm={confirmDelete} name="video" />
       <UpdateVideoModal show={showUpdateModal} onClose={closeUpdateModal} video={videoC} />
       <ShareModal show={showShareModal} handleClose={toggleModal} />
     </div>

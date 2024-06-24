@@ -1,8 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './SignIn.css';
-import { UserContext } from '../context/UserContext';
-import {UsersContext, users} from '../context/UsersContext'
+import { UserContext } from '../context/UserContext'
 import Logo from '../icons/Logo'
 import MailIcon from '../icons/MailIcon'
 import PasswordIcon from '../icons/PasswordIcon'
@@ -11,24 +10,51 @@ function SignIn() {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
     const { login } = useContext(UserContext);
-    const{getUser} = useContext(UsersContext);
-    const handleSignIn = (e) => {
+    const handleSignIn = async (e) => {
         e.preventDefault();
          // Check if username or password are empty
          if (!username || !password) {
             alert('fields cannot be empty.');
             return;
         }
-        const existingUser = getUser(username);
+        const user = {
+            username,
+            password
+        };
         
-        if (existingUser && existingUser.password === password ) {
-            login(existingUser); 
-          
-            navigate('/'); // Redirect to home or dashboard page
-        } else {
-           
-            alert('Invalid credentials');
-        }
+        const loginResponse = await fetch('http://localhost:1324/api/users/login', {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(user),
+            })
+    
+        const loginData = await loginResponse.json();
+       
+        if (loginData.token && loginData.result === 'Success' ) {
+                localStorage.setItem('userId', loginData.userId);
+                localStorage.setItem('token', loginData.token);
+                const userDetailsResponse = await fetch(`http://localhost:1324/api/users/${loginData.userId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${loginData.token}`,
+                    },
+                });
+                if (!userDetailsResponse.ok) {
+                    throw new Error('Failed to fetch user details');
+                }
+                const userDetailsJson = await userDetailsResponse.json();
+                login(userDetailsJson);
+                alert('Successful Login');
+                    navigate('/'); // Redirect to home or dashboard page
+            } 
+            else{
+                alert('Invalid username or password');          
+            }
+
+               
+               
     };
 
 

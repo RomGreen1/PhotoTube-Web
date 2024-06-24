@@ -1,13 +1,12 @@
 // RegistrPage.js
 import { useNavigate } from 'react-router-dom';
-import { UsersContext  } from '../context/UsersContext';
 import { UserContext  } from '../context/UserContext';
 import 'material-design-iconic-font/dist/css/material-design-iconic-font.min.css';
 import './RegisterPage.css';
 import React, { useState, useEffect, useContext } from 'react';
 
 function RegisterPage() {
-    const { addUser,getUser } = useContext(UsersContext);
+    
     const {user} = useContext(UserContext);
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
@@ -20,6 +19,8 @@ function RegisterPage() {
         confirmPassword: '',
         picture: null,
     });
+    const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
+
     useEffect(() => {
         if (user) {
             navigate('/signin');
@@ -27,7 +28,22 @@ function RegisterPage() {
 
     }, []);
 
-    const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
+   
+    async function isExist (username) {
+        try{
+            
+            const response = await fetch(`http://localhost:1324/api/users/isExist?username=${username}`);
+            const isExistValue = await response.json();
+
+            if (!response.ok) throw new Error(isExistValue.message || 'Error checking username');
+            console.log(isExistValue)
+            return isExistValue.exists;
+        }
+        catch(error){
+            console.error('Error:', error)
+            return true; // Return true to block registration if there's an error
+        }
+    }
 
     const handleChange = (event) => {
         const { name, value, files } = event.target;
@@ -50,12 +66,12 @@ function RegisterPage() {
         }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const { firstName, lastName, username, email, gender, password, confirmPassword } = formData;
+        const { firstName, lastName, username, email, gender, password, confirmPassword ,picture} = formData;
 
             // Check if all fields are filled
-            if (!firstName || !lastName || !username || !email || !gender || !password || !confirmPassword || !formData.picture ) {
+            if (!firstName || !lastName || !username || !email || !gender || !password || !confirmPassword || !picture ) {
                 alert('You have to fill all the fields.');
                 return;
             }
@@ -80,9 +96,46 @@ function RegisterPage() {
                 alert('Password must be at least 8 characters and include both letters and digits.');
                 return;
             }
-        const newUser = { username, password, name: `${firstName} ${lastName}`, picture: imagePreviewUrl };
-        addUser(newUser);
-        navigate('/signin');
+            if (await isExist(username)) {
+                alert('Username exists or there was an error, registration is blocked');
+                return;
+            }
+            else
+            {
+                 // Proceed to create new user
+                const newUser = {
+                    username,
+                    password,
+                    displayname: `${firstName} ${lastName}`,
+                    gender,
+                    profileImg: imagePreviewUrl
+                };
+                try{
+                    const response = await fetch('http://localhost:1324/api/users', {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(newUser),
+                      });
+                      const data = await response.json();
+
+                      if (response.ok) {
+                        alert('Registration successful!');
+                        navigate('/signin');
+                        
+                      } else {
+                        console.error('Registration error:', data);
+                        alert('An error occurred. Please try again.');
+                      }
+                }
+                catch(error)
+                {
+                    console.error('There was an error!', error);
+                    alert('An error occurred. Please try again.');
+                }
+            }
+        
     };
 
     return (

@@ -2,12 +2,11 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../context/UserContext';
 import { RiVideoAddLine, RiImageAddLine } from "react-icons/ri";
-import { VideosContext } from '../../context/VideosContext';
 import './AddVideo.css';
 
 function AddVideo() {
     const { user } = useContext(UserContext);
-    const { addVideo } = useContext(VideosContext); // Access the addVideo function from the VideosContext
+   
     const navigate = useNavigate();
     const [videoTitle, setVideoTitle] = useState('');
     const [authorName, setAuthorName] = useState('');

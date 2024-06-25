@@ -5,6 +5,17 @@
   height: 100vh; /* Full viewport height */
 }
 
+.username-btn {
+  background: none;
+  border: none;
+  color: blue;
+  cursor: pointer;
+  font-size: 16px;
+  text-decoration: underline;
+  padding: 0;
+  margin-right: 10px;
+}
+
 .video-page-item {
   width: 100%;
   margin: 3vh 0 30px 20vh;

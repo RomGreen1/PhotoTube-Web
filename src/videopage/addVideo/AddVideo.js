@@ -8,8 +8,6 @@ function AddVideo() {
     const { user } = useContext(UserContext);
     const navigate = useNavigate();
     const [videoTitle, setVideoTitle] = useState('');
-    const [authorName, setAuthorName] = useState('');
-    const [thumbnailImage, setThumbnailImage] = useState(null);
     const [videoFile, setVideoFile] = useState(null);
 
     useEffect(() => {
@@ -36,11 +34,6 @@ function AddVideo() {
         };
 
         try {
-            if (thumbnailImage) {
-                newVideo.imageUrl = await readFileAsDataURL(thumbnailImage);
-            } else {
-                newVideo.imageUrl = '';
-            }
 
             if (videoFile) {
                 newVideo.videoUrl = await readFileAsDataURL(videoFile);
@@ -82,23 +75,11 @@ function AddVideo() {
                     <input type="text" value={videoTitle} onChange={(e) => setVideoTitle(e.target.value)} />
                 </div>
                 <div className="form-group">
-                    <label>Author:</label>
-                    <input type="text" value={authorName} onChange={(e) => setAuthorName(e.target.value)} />
-                </div>
-                <div className="form-group">
                     <label>Video:</label>
                     <span>
                         <input type="file" id="videoFile" accept="video/*" hidden onChange={(e) => setVideoFile(e.target.files[0])} />
                         <label htmlFor="videoFile"><RiVideoAddLine size={40} /></label>
                         <span>{videoFile ? videoFile.name : 'No file chosen'}</span>
-                    </span>
-                </div>
-                <div className="form-group">
-                    <label>Image:</label>
-                    <span>
-                        <input type="file" id="thumbnailImage" accept="image/*" hidden onChange={(e) => setThumbnailImage(e.target.files[0])} />
-                        <label htmlFor="thumbnailImage"><RiImageAddLine size={40} /></label>
-                        <span>{thumbnailImage ? thumbnailImage.name : 'No file chosen'}</span>
                     </span>
                 </div>
                 <div className="button-group">

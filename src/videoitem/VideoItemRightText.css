@@ -22,6 +22,7 @@
 .video-item-right-text .video-details-right {
   display: flex;
   flex-direction: column;
+  width: 100px;
 }
 
 .video-item-right-text .video-title-right {

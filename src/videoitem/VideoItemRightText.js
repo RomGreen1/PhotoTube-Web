@@ -28,7 +28,8 @@ function VideoItemRightText({ video }) {
       <div className="video-details-right">
         <span className="video-title-right">{video.title}</span>
         <span className="video-author">{video.createdBy}</span>
-        <span className="video-stats">{video.views} views - {formatDate(video.date)}</span>
+        <span className="video-stats">{video.views} views</span>
+        <span className="video-stats">  {formatDate(video.date)}</span>
       </div>
     </div>
   );

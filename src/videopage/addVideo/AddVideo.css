@@ -1,4 +1,4 @@
-.user-info-container {
+.add-video-container {
     background: var(--background-color);
     padding: 20px;
     border-radius: 5px;
@@ -14,7 +14,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add box shadow */
 }
   
-.user-info-form {
+.add-video-form {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
@@ -22,25 +22,25 @@
     color: var(--text-color);
 }
   
-.user-info-form h3 {
+.add-video-form h3 {
     margin-bottom: 2rem;
 }
   
-.user-info-form .form-group {
+.add-video-form .form-group {
     margin-bottom: 2rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
   
-.user-info-form label {
+.add-video-form label {
     font-size: 1em;
     width: 20%;
     text-align: right;
     margin-right: 1rem;
 }
   
-.user-info-form input {
+.add-video-form input {
     width: 75%;
     padding: 0.5rem;
     color:var(--text-color);
@@ -75,11 +75,11 @@
     }
 }
   
-.user-info-form input:focus {
+.add-video-form input:focus {
     animation: border-focus-animation 0.3s forwards;
 }
   
-.user-info-form .button-group {
+.add-video-form .button-group {
     display: flex;
     justify-content: center;
     margin-top: auto;
@@ -87,7 +87,7 @@
     margin-bottom: 1vh;
 }
   
-.user-info-form .btn-confirm {
+.add-video-form .btn-confirm {
     padding: 0.5rem;
     cursor: pointer;
     width: 100%;
@@ -100,11 +100,11 @@
     justify-content: center;
 }
   
-.user-info-form .btn-confirm svg {
+.add-video-form .btn-confirm svg {
     margin-left: 0.5rem;
 }
   
-.user-info-form .form-group span {
+.add-video-form .form-group span {
     display: flex;
     align-items: center;
     margin-left: auto;
@@ -115,7 +115,7 @@
     text-overflow: ellipsis;
 }
   
-.user-info-form .form-group label svg {
+.add-video-form .form-group label svg {
     margin-right: 0.5rem;
     vertical-align: middle;
 }

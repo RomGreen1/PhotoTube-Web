@@ -38,7 +38,7 @@ function AppContent() {
       </div>
       <div id="Rou">
             <Routes>      
-                <Route path="/video/:id" element={<VideoPage />} />
+                <Route path="/video/:videoId/:userIdCreater" element={<VideoPage />} />
                 <Route path="/" element={<HomePage />} />
                 <Route path="/signin" element={<SignIn />} />
                 <Route path="/register" element={<RegisterPage />} />

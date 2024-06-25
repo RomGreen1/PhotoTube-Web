@@ -6,7 +6,6 @@ import './AddVideo.css';
 
 function AddVideo() {
     const { user } = useContext(UserContext);
-   
     const navigate = useNavigate();
     const [videoTitle, setVideoTitle] = useState('');
     const [authorName, setAuthorName] = useState('');
@@ -19,42 +18,60 @@ function AddVideo() {
         }
     }, [user, navigate]);
 
+    const readFileAsDataURL = (file) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
+    };
+
     const handleSubmit = async (event) => {
         event.preventDefault();
-    
+
         const newVideo = {
-          title: videoTitle,
-          author: user.username,
-          likes: 0,
-          views: 0,
-          date: new Date().toLocaleString(),
-          imageUrl: thumbnailImage ? URL.createObjectURL(thumbnailImage) : '',
-          videoUrl: videoFile ? URL.createObjectURL(videoFile) : '',
+            title: videoTitle,
+            views: 0,
         };
-    
+
         try {
-          const userId = localStorage.getItem('userId');
-          const response = await fetch(`http://localhost:1324/api/users/${userId}/videos`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(newVideo),
-          });
-          const data = await response.json();
-    
-          if (response.ok) {
-            alert('Add successful!');
-            navigate('/');
-          } else {
-            console.error('Adding error:', data);
-            alert('An error occurred. Please try again.');
-          }
+            if (thumbnailImage) {
+                newVideo.imageUrl = await readFileAsDataURL(thumbnailImage);
+            } else {
+                newVideo.imageUrl = '';
+            }
+
+            if (videoFile) {
+                newVideo.videoUrl = await readFileAsDataURL(videoFile);
+            } else {
+                newVideo.videoUrl = '';
+            }
+
+            const userId = localStorage.getItem('C');
+            const token = localStorage.getItem('token');
+            const response = await fetch(`http://localhost:1324/api/users/${userId}/videos`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newVideo),
+            });
+            const data = await response.json();
+
+            if (response.ok) {
+                alert('Add successful!');
+                navigate('/');
+            } else {
+                console.error('Adding error:', data);
+                alert('An error occurred. Please try again.');
+            }
         } catch (error) {
-          console.error('There was an error!', error);
-          alert('An error occurred. Please try again.');
+            console.error('There was an error!', error);
+            alert('An error occurred. Please try again.');
         }
-      };
+    };
 
     return (
         <div className="add-video-container">

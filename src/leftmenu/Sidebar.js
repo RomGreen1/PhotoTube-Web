@@ -66,8 +66,8 @@ function Sidebar() {
         )}
         {user && (
           <>
-            <li>
-              <a><MdAdd className='icon' onClick={() => navigate('/addvideo')}/> </a>
+            <li onClick={() => navigate('/addvideo')}>
+              <a><MdAdd className='icon' /> </a>
               <span>add Video</span>
             </li>
             <li>

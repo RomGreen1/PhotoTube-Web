@@ -6,7 +6,15 @@ function VideoItemRightText({ video }) {
   const navigate = useNavigate();
 
   const handleVideoClick = () => {
-    navigate(`/video/${video.id}`);
+    navigate(`/video/${video._id}/${video.userId}`);
+  };
+  const formatDate = (isoDate) => {
+    const date = new Date(isoDate);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
   };
 
   return (
@@ -19,8 +27,8 @@ function VideoItemRightText({ video }) {
       </div>
       <div className="video-details-right">
         <span className="video-title-right">{video.title}</span>
-        <span className="video-author">{video.author}</span>
-        <span className="video-stats">{video.views} views - {video.time}</span>
+        <span className="video-author">{video.createdBy}</span>
+        <span className="video-stats">{video.views} views - {formatDate(video.date)}</span>
       </div>
     </div>
   );

@@ -6,7 +6,6 @@ import { SearchContext } from '../context/SearchContext';
 
 function HomePage() {
 
-  
   // Initialize videoList state as an empty array
   const [videoList, setVideoList] = useState([]);
   const [filteredVideos, setFilteredVideos] = useState([]);
@@ -21,7 +20,6 @@ function HomePage() {
       setVideoList(videosData);
       setFilteredVideos(videosData); 
     };
-
     fetchVideos();
   }, []);
 

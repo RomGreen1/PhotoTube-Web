@@ -38,7 +38,7 @@ function VideoPage() {
       setVideoList(filteredVideos);
     };
     fetchVideos();
-  }, [videoId, userIdCreater]);
+  }, [videoId, userIdCreater, navigate]);
 
   useEffect(() => {
     if (videoC && videoRef.current) {
@@ -151,6 +151,12 @@ function VideoPage() {
     }
   };
 
+  const handleUserClick = () => {
+    navigate(`/userPage/${userIdCreater}`);
+    console.log('videoC:' ,videoC);
+
+  };
+
   const userHasLiked = videoC?.likes?.some(like => like.userId === loggedId && like.action === 'like');
   const userHasDisliked = videoC?.likes?.some(like => like.userId === loggedId && like.action === 'dislike');
   const likeCount = videoC?.likes?.filter(like => like.action === 'like').length || 0;
@@ -190,8 +196,11 @@ function VideoPage() {
                   <div>
                     <img className='video-img-page' src={videoC.imageUrl} alt="video thumbnail" /><span> {videoC.createdBy}</span>
                   </div>
+                  <button className="username-btn" onClick={handleUserClick}>{videoC.createdBy}</button>
+
                   <div className="like-dislike-container">
                     <div className="like-dislike-button">
+
                       {userHasLiked ?
                         <AiTwotoneLike className='icon' onClick={() => handleLike()} /> :
                         <AiOutlineLike className='icon' onClick={() => handleLike()} />}

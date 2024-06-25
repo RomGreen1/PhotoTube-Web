@@ -6,6 +6,7 @@ import RegisterPage from '../registration/RegistrPage.js';
 import AddVideo from '../videopage/addVideo/AddVideo.js';
 import HomePage from '../home/Home.js';
 import VideoPage from '../videopage/VideoPage.js';
+import UserPage from '../userInfo/UserPage.js';
 import { DarkModeContext } from '../context/DarkModeContext';
 import LeftMenu from '../leftmenu/LeftMenu.js';
 import Sidebar from '../leftmenu/Sidebar.js'; // Assuming you have a Sidebar component
@@ -44,6 +45,7 @@ function AppContent() {
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/addvideo" element={<AddVideo />} />
                 <Route path="/userInfo" element={<UserInfo />} />
+                <Route path="/userPage/:id" element={<UserPage />} />
             </Routes>
             </div>
         </div>

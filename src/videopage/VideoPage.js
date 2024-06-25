@@ -209,7 +209,7 @@ function VideoPage() {
                   <span>{videoC.views} views - {formatDate(videoC.date)}</span>
                 </div>
                 <div className="video-comments-page">
-                  <VideoComments videoId={videoC._id} />
+                  <VideoComments video={videoC} />
                 </div>
               </div>
             </>

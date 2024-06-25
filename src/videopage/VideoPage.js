@@ -188,7 +188,7 @@ function VideoPage() {
 
                 <div className='video-img-dir-page'>
                   <div>
-                    <img className='video-img-page' src={videoC.imageUrl} alt="video thumbnail" /><span> {videoC.createdBy}</span>
+                    <img className='video-img-page' src={videoC.creatorImg} alt="video thumbnail" /><span> {videoC.createdBy}</span>
                   </div>
                   <div className="like-dislike-container">
                     <div className="like-dislike-button">

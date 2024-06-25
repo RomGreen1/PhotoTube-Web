@@ -1,4 +1,4 @@
-.modal-overlay {
+.update-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -11,14 +11,14 @@
     z-index: 1000;
 }
   
-.modal-content {
+.update-modal-content {
     background: var(--background-color);
     padding: 20px;
     border-radius: 5px;
     text-align: center;
     max-width: 600px;
     width: 100%;
-    height: 60%;
+    height: 30%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;

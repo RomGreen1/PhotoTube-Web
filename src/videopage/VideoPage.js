@@ -1,114 +1,160 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { VideosContext } from '../context/VideosContext';
 import { UserContext } from '../context/UserContext';
-import { LikesContext } from '../context/LikesContext';
+
 import './VideoPage.css';
 import VideoComments from './videoComments/VideoComments';
-import { AiOutlineLike, AiTwotoneLike, AiOutlineDislike, AiTwotoneDislike } from "react-icons/ai";
-import VideoListRightList from '../videos/VideoListRightText';
 import SearchBar from '../searchbar/SearchBar';
-import { LuFileEdit } from "react-icons/lu";
-import { MdOutlineDelete } from "react-icons/md";
 import ConfirmationModal from '../confirmModal/ConfirmationModal';
 import UpdateVideoModal from '../confirmModal/UpdateVideoModal';
 import ShareModal from '../confirmModal/ShareModal';
+import VideoListRightList from '../videos/VideoListRightText';
+
+import { AiOutlineLike, AiTwotoneLike, AiOutlineDislike, AiTwotoneDislike } from "react-icons/ai";
+import { LuFileEdit } from "react-icons/lu";
+import { MdOutlineDelete } from "react-icons/md";
 import { GoShare } from "react-icons/go";
 
 function VideoPage() {
-  // Get user from UserContext
   const { user } = useContext(UserContext);
-  // Get video id from URL parameters
-  const { id } = useParams();
-  // Get videos and deleteVideo function from VideosContext
-  const { videos, deleteVideo } = useContext(VideosContext);
-  // Get likes, handleLike, and handleDislike functions from LikesContext
-  const { likes, handleLike, handleDislike } = useContext(LikesContext);
-  // Initialize videoList state as an empty array
+  const { videoId, userIdCreater } = useParams();
   const [videoList, setVideoList] = useState([]);
-  // Create a reference for the video element
   const videoRef = useRef(null);
-  // Initialize videoC state as null (current video)
   const [videoC, setVideoC] = useState(null);
-  // Initialize currentLikes state to keep track of likes count
-  const [currentLikes, setCurrentLikes] = useState(0);
-  // Initialize hasLiked state to check if the user has liked the video
-  const [hasLiked, setHasLiked] = useState(false);
-  // Initialize hasDisLiked state to check if the user has disliked the video
-  const [hasDisLiked, setHasDisLiked] = useState(false);
-  // Initialize showModal state to manage confirmation modal visibility
-  const [showModal, setShowModal] = useState(false);
-  // Initialize showUpdateModal state to manage update modal visibility
-  const [showUpdateModal, setShowUpdateModal] = useState(false);
-  // Initialize showShareModal state to manage share modal visibility
-  const [showShareModal, setShareShowModal] = useState(false);
+  const [showModal, setShowModal] = useState({ type: null, isVisible: false });
+  const navigate = useNavigate();
 
-  // Effect to filter out the current video from the video list and set the current video
   useEffect(() => {
-    const filteredVideos = videos.filter(v => v.id !== parseInt(id));
-    setVideoList(filteredVideos);
-    const foundVideo = videos.find(v => v.id === parseInt(id));
-    setVideoC(foundVideo);
-  }, [videos, id]);
+    const fetchVideos = async () => {
+      const videoResponse = await fetch(`http://localhost:1324/api/users/${userIdCreater}/videos/${videoId}`);
+      const videoData = await videoResponse.json();
+      if (!videoData) {
+        navigate('/');
+      }
+      setVideoC(videoData);
+      const videosResponse = await fetch('http://localhost:1324/api/videos');
+      const videosData = await videosResponse.json();
+      const filteredVideos = videosData.filter(v => v._id !== videoId);
+      setVideoList(filteredVideos);
+    };
+    fetchVideos();
+  }, [videoId, userIdCreater]);
 
-  // Effect to set current likes and like/dislike states when videoC or likes change
-  useEffect(() => {
-    if (videoC) {
-      const videoLikes = likes.find(video => video.id === videoC.id) || { count: 0, likes: [], dislikes: [] };
-      setCurrentLikes(videoLikes.count);
-      setHasLiked(videoLikes.likes.includes(user?.username));
-      setHasDisLiked(videoLikes.dislikes.includes(user?.username));
-    }
-  }, [videoC, likes, user]);
-
-  // Effect to set the video source when videoC changes
   useEffect(() => {
     if (videoC && videoRef.current) {
       videoRef.current.src = videoC.videoUrl;
       videoRef.current.load();
     }
-  }, [videoC]);
+  }, [videoC?.videoUrl]);
 
-  // Function to open the delete confirmation modal
-  const openModal = () => {
-    if (!user) {
-      alert("You must be logged in to delete videos.");
+  const toggleModal = (type) => {
+    if (!user && type !== 'share') {
+      alert("You must be logged in to perform this action.");
       return;
     }
-
-    setShowModal(true);
+    setShowModal({ type, isVisible: !showModal.isVisible });
   };
 
-  // Function to close the delete confirmation modal
-  const closeModal = () => {
-    setShowModal(false);
+  const confirmDelete = async () => {
+       try {
+      const response = await fetch(`http://localhost:1324/api/users/${userIdCreater}/videos/${videoId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete video');
+      }
+
+      alert('Video deleted successfully');
+      navigate('/'); // Redirect to another page after successful deletion
+    } catch (error) {
+      console.error('Error deleting video:', error);
+      alert('Failed to delete video');
+    } finally {
+      toggleModal(null);
+    }
   };
 
-  // Function to confirm video deletion
-  const confirmDelete = () => {
-    deleteVideo(videoC.id);
-    closeModal();
+  const formatDate = (isoDate) => {
+    const date = new Date(isoDate);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
   };
 
-  // Function to open the update modal
-  const openUpdateModal = () => {
+  const loggedId = localStorage.getItem('userId')
+  const token = localStorage.getItem('token')
+  const handleLike = async () => {
     if (!user) {
-      alert("You must be logged in to update videos.");
+      alert("You must be logged in to like videos.");
       return;
     }
+    
+    try {
+      const response = await fetch(`http://localhost:1324/api/users/${loggedId}/videos/${videoId}/like`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ action: 'like' }),
+      });
 
-    setShowUpdateModal(true);
+      if (!response.ok) {
+        throw new Error('Failed to like video');
+      }
+
+      const updatedLikes = await response.json();
+      setVideoC(prevVideoC => ({
+        ...prevVideoC,
+        likes: updatedLikes.likes
+      }));
+
+    } catch (error) {
+      console.error('Error liking video:', error);
+    }
   };
 
-  // Function to close the update modal
-  const closeUpdateModal = () => {
-    setShowUpdateModal(false);
+  const handleDislike = async () => {
+    if (!user) {
+      alert("You must be logged in to dislike videos.");
+      return;
+    }
+    try {
+      const response = await fetch(`http://localhost:1324/api/users/${loggedId}/videos/${videoId}/like`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ action: 'dislike' }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to dislike video');
+      }
+
+      const updatedLikes = await response.json();
+      setVideoC(prevVideoC => ({
+        ...prevVideoC,
+        likes: updatedLikes.likes
+      }));
+
+    } catch (error) {
+      console.error('Error disliking video:', error);
+    }
   };
 
-  // Function to toggle the share modal
-  const toggleModal = () => {
-    setShareShowModal(!showShareModal);
-  };
+  const userHasLiked = videoC?.likes?.some(like => like.userId === loggedId && like.action === 'like');
+  const userHasDisliked = videoC?.likes?.some(like => like.userId === loggedId && like.action === 'dislike');
+  const likeCount = videoC?.likes?.filter(like => like.action === 'like').length || 0;
+  const isCreator = user &&loggedId === userIdCreater;
 
   return (
     <div className='video-page'>
@@ -121,7 +167,7 @@ function VideoPage() {
             <>
               <div className="video-player-page">
                 <video ref={videoRef} controls autoPlay>
-                  <source src={videoC.videoUrl} type="video/mp4" />
+                  <source src={`data:video/mp4;base64,${videoC.videoUrl}`} type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
               </div>
@@ -131,36 +177,39 @@ function VideoPage() {
                   <span className='video-title-page'>{videoC.title} </span>
                   
                   <div className='video-delete-update-icon'>
-                    <span className='span-margin'><GoShare size={30} onClick={toggleModal}/></span>
-                    <span className='span-margin'><LuFileEdit onClick={openUpdateModal} style={{ marginBottom: 1 }} /></span>
-                    <span><MdOutlineDelete onClick={openModal} /></span>
+                    <span className='span-margin'><GoShare size={30} onClick={() => toggleModal('share')} /></span>
+                    {isCreator ? 
+                    (<>
+                    <span className='span-margin'><LuFileEdit onClick={() => toggleModal('update')} style={{ marginBottom: 1 }} /></span>
+                    <span><MdOutlineDelete onClick={() => toggleModal('delete')} /></span>
+                    </>) : null}        
                   </div>
                 </div>
 
                 <div className='video-img-dir-page'>
                   <div>
-                    <img className='video-img-page' src={videoC.img} alt="video thumbnail" /><span> {videoC.author}</span>
+                    <img className='video-img-page' src={videoC.imageUrl} alt="video thumbnail" /><span> {videoC.createdBy}</span>
                   </div>
                   <div className="like-dislike-container">
                     <div className="like-dislike-button">
-                      {hasLiked ?
-                        <AiTwotoneLike className='icon' onClick={() => handleLike(videoC.id)} /> :
-                        <AiOutlineLike className='icon' onClick={() => handleLike(videoC.id)} />}
-                      <span>{currentLikes}</span>
+                      {userHasLiked ?
+                        <AiTwotoneLike className='icon' onClick={() => handleLike()} /> :
+                        <AiOutlineLike className='icon' onClick={() => handleLike()} />}
+                      <span>{likeCount}</span>
                     </div>
                     <div className="separator"></div>
                     <div className="like-dislike-button">
-                      {hasDisLiked ?
-                        <AiTwotoneDislike className='icon' onClick={() => handleDislike(videoC.id)} /> :
-                        <AiOutlineDislike className='icon' onClick={() => handleDislike(videoC.id)} />}
+                      {userHasDisliked ?
+                        <AiTwotoneDislike className='icon' onClick={() => handleDislike()} /> :
+                        <AiOutlineDislike className='icon' onClick={() => handleDislike()} />}
                     </div>
                   </div>
                 </div>
                 <div className='views-time'>
-                  <span>{videoC.views} views - {videoC.time}</span>
+                  <span>{videoC.views} views - {formatDate(videoC.date)}</span>
                 </div>
                 <div className="video-comments-page">
-                  <VideoComments videoId={videoC.id} />
+                  <VideoComments videoId={videoC._id} />
                 </div>
               </div>
             </>
@@ -170,9 +219,22 @@ function VideoPage() {
           <VideoListRightList videos={videoList} />
         </div>
       </div>
-      <ConfirmationModal show={showModal} onClose={closeModal} onConfirm={confirmDelete} name="video" />
-      <UpdateVideoModal show={showUpdateModal} onClose={closeUpdateModal} video={videoC} />
-      <ShareModal show={showShareModal} handleClose={toggleModal} />
+      {showModal.type === 'delete' && (
+        <ConfirmationModal show={showModal.isVisible} onClose={() => toggleModal('delete')} onConfirm={confirmDelete} name="video" />
+      )}
+      {showModal.type === 'update' && (
+          <UpdateVideoModal 
+          show={showModal.isVisible} 
+          onClose={() => toggleModal('update')} 
+          video={videoC} 
+          id={userIdCreater}
+          pid={videoId}
+          onUpdate={(updatedVideo) => setVideoC(updatedVideo)}
+        />
+      )}
+      {showModal.type === 'share' && (
+        <ShareModal show={showModal.isVisible} handleClose={() => toggleModal('share')} />
+      )}
     </div>
   );
 }

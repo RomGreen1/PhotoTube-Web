@@ -1,35 +1,64 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { VideosContext } from '../context/VideosContext';
-import { RiVideoAddLine, RiImageAddLine } from "react-icons/ri";
+import React, { useState, useEffect } from 'react';
+import { RiVideoAddLine } from "react-icons/ri";
 import './UpdateVideoModal.css';
 
-function UpdateVideoModal({ show, onClose, video }) {
-  const { updateVideo } = useContext(VideosContext);
-  const [videoTitle, setVideoTitle] = useState('');
-  const [authorName, setAuthorName] = useState('');
-  const [thumbnailImage, setThumbnailImage] = useState(null);
+function UpdateVideoModal({ show, onClose, pid, id, video,onUpdate  }) {
+  const [videoTitle, setVideoTitle] = useState(video.title);
   const [videoFile, setVideoFile] = useState(null);
+  const [videoBase64, setVideoBase64] = useState(video.videoUrl);
 
   useEffect(() => {
     if (video) {
       setVideoTitle(video.title);
-      setAuthorName(video.author);
+      setVideoBase64(video.videoUrl);
     }
   }, [video]);
 
-  const handleSubmit = (event) => {
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setVideoFile(file);
+      
+      // Convert file to base64
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setVideoBase64(reader.result);
+      };
+    }
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const updatedVideo = {
-      ...video,
+    const token = localStorage.getItem('token');
+
+    const updatedVideoData = {
       title: videoTitle,
-      author: authorName,
-      img: thumbnailImage ? URL.createObjectURL(thumbnailImage) : video.img,
-      videoUrl: videoFile ? URL.createObjectURL(videoFile) : video.videoUrl,
+      videoUrl: videoBase64,
     };
 
-    updateVideo(updatedVideo);
-    onClose();
+    try {
+      const response = await fetch(`http://localhost:1324/api/users/${id}/videos/${pid}`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedVideoData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update video');
+      }
+
+      const updatedVideo = await response.json();
+      onUpdate(updatedVideo);
+      alert('Updated Successfully');     
+      onClose();
+    } catch (error) {
+      console.error('Error updating video:', error);
+    }
   };
 
   if (!show) {
@@ -37,8 +66,8 @@ function UpdateVideoModal({ show, onClose, video }) {
   }
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
+    <div className="update-modal-overlay">
+      <div className="update-modal-content">
         <form onSubmit={handleSubmit} className="update-video-form">
           <h3>Update Video</h3>
           <div className="form-group">
@@ -46,30 +75,14 @@ function UpdateVideoModal({ show, onClose, video }) {
             <input type="text" value={videoTitle} onChange={(e) => setVideoTitle(e.target.value)} />
           </div>
           <div className="form-group">
-            <label>Author:</label>
-            <input type="text" value={authorName} onChange={(e) => setAuthorName(e.target.value)} />
-          </div>
-          <div className="form-group">
             <label>
               Video:
             </label>
             <span>
-              <input type="file" id="videoFile" accept="video/*" onChange={(e) => setVideoFile(e.target.files[0])} hidden />
+              <input type="file" id="videoFile" accept="video/*" onChange={handleFileChange} hidden />
               <label htmlFor="videoFile"><RiVideoAddLine size={40} /></label>
-              <span> {videoFile ? videoFile.name : video.videoUrl}</span>
+              <span> {videoFile ? videoFile.name : 'Click to change the video'}</span>
             </span>
-        
-          </div>
-          <div className="form-group">
-            <label>
-              Image:
-            </label>
-            <span>
-              <input type="file" id="thumbnailImage" accept="image/*" onChange={(e) => setThumbnailImage(e.target.files[0])} hidden />
-              <label htmlFor="thumbnailImage"><RiImageAddLine size={40} /></label>
-              <span> {thumbnailImage ? thumbnailImage.name : video.img}</span>
-            </span>
-           
           </div>
           <div className="button-group">
             <button type="submit" className="btn-confirm">Update Video</button>

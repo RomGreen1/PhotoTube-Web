@@ -1,15 +1,10 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { UserContext } from '../../context/UserContext';
-import { CommentsContext } from '../../context/CommentsContext';
+import React, { useState, useContext } from 'react';
 import './VideoComments.css';
-import { MdDeleteOutline, MdCancelPresentation } from "react-icons/md";
+import { MdDeleteOutline } from "react-icons/md";
 import { BiCommentCheck, BiCommentX, BiCommentEdit, BiShare } from "react-icons/bi";
+import { UserContext } from '../../context/UserContext';
 
-function VideoComments({ videoId }) {
-    // Get the user from the UserContext
-    const { user } = useContext(UserContext);
-    // Get comments and comment management functions from the CommentsContext
-    const { comments, addComment, updateComment, deleteComment } = useContext(CommentsContext);
+function VideoComments({ video }) {
     // Initialize newComment state for adding a new comment
     const [newComment, setNewComment] = useState('');
     // Initialize editComment state for editing a comment
@@ -18,63 +13,114 @@ function VideoComments({ videoId }) {
     const [editingIndex, setEditingIndex] = useState(-1);
     // Initialize editing state to toggle editing mode
     const [editing, setEditing] = useState(false);
-
-    // Get the comments for the specific video
-    const videoComments = comments[videoId] || [];
+    const { user } = useContext(UserContext);
 
     // Function to handle adding a new comment
-    const handleAddComment = () => {
+    const handleAddComment = async () => {
         if (!newComment.trim()) {
             alert('Please write something before submitting.');
             return;
         }
-
+        console.log(video)
+        const userId = localStorage.getItem('userId');
+        const token = localStorage.getItem('token');
         const commentData = {
-            text: newComment,
-            author: user.username,
-            avatar: user.avatar,
-            date: new Date().toLocaleDateString()
+            commentText: newComment,
         };
-
-        addComment(videoId, commentData); // Add the comment
-        setNewComment(''); // Clear the newComment state
+        
+        try {
+            const response = await fetch(`http://localhost:1324/api/users/${userId}/videos/${video._Id}/comments`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(commentData),
+            });
+    
+            if (!response.ok) {
+                throw new Error('Failed to add comment');
+            }
+    
+            const newCommentData = await response.json();
+            video.comments.push(newCommentData); // Add the comment to the video.comments array
+            setNewComment(''); // Clear the newComment state
+        } catch (error) {
+            console.error('Error adding comment:', error);
+        }
     };
 
     // Function to handle updating a comment
-    const handleUpdateComment = () => {
+    const handleUpdateComment = async () => {
         if (!editComment.trim()) {
             alert('Please write something before updating.');
             return;
         }
 
+        const token = localStorage.getItem('token');
+        const commentId = video.comments[editingIndex]._id; // Get the comment ID
+
         const commentData = {
-            text: editComment,
-            author: user.username,
-            avatar: user.avatar,
-            date: new Date().toLocaleDateString()
+            commentText: editComment,
         };
 
-        updateComment(videoId, editingIndex, commentData); // Update the comment
-        setEditingIndex(-1); // Reset editing index
-        setEditing(false); // Exit editing mode
-        setEditComment(''); // Clear the editComment state
-    };
+        try {
+            const response = await fetch(`http://localhost:1324/api/users/${commentId}/comments`, {
+                method: 'PATCH',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(commentData),
+            });
 
-    // Function to handle editing a comment
-    const handleEdit = (index) => {
-        setEditing(true); // Enter editing mode
-        setEditingIndex(index); // Set the index of the comment being edited
-        setEditComment(videoComments[index].text); // Set the text of the comment being edited
+            if (!response.ok) {
+                throw new Error('Failed to update comment');
+            }
+
+            const updatedCommentData = await response.json();
+            video.comments[editingIndex] = updatedCommentData; // Update the comment in the video.comments array
+            setEditingIndex(-1); // Reset editing index
+            setEditing(false); // Exit editing mode
+            setEditComment(''); // Clear the editComment state
+        } catch (error) {
+            console.error('Error updating comment:', error);
+        }
     };
 
     // Function to handle deleting a comment
-    const handleDelete = (index) => {
-        deleteComment(videoId, index); // Delete the comment
-        if (editingIndex === index) {
-            setEditingIndex(-1); // Reset editing index if the deleted comment was being edited
-            setEditing(false); // Exit editing mode
-            setEditComment(''); // Clear the editComment state
+    const handleDelete = async (index) => {
+        const token = localStorage.getItem('token');
+        const commentId = video.comments[index]._id; // Get the comment ID
+
+        try {
+            const response = await fetch(`http://localhost:1324/api/users/${commentId}/comments`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to delete comment');
+            }
+
+            video.comments.splice(index, 1); // Remove the comment from the video.comments array
+            if (editingIndex === index) {
+                setEditingIndex(-1); // Reset editing index if the deleted comment was being edited
+                setEditing(false); // Exit editing mode
+                setEditComment(''); // Clear the editComment state
+            }
+        } catch (error) {
+            console.error('Error deleting comment:', error);
         }
+    };
+
+    // Function to handle editing a comment
+    const handleEdit = (index, comment) => {
+        setEditing(true); // Enter editing mode
+        setEditingIndex(index); // Set the index of the comment being edited
+        setEditComment(comment.commentText); // Set the text of the comment being edited
     };
 
     // Function to cancel editing a comment
@@ -88,7 +134,7 @@ function VideoComments({ videoId }) {
         <div className="comments-section">
             <h3>Comments</h3>
             <hr className="divider" />
-            {videoComments.map((comment, index) => (
+            {video.comments.map((comment, index) => (
                 <div key={index} className="comment">
                     <div className="comment-header">
                         <img src={comment.avatar} alt="avatar" className="comment-avatar" />
@@ -118,7 +164,7 @@ function VideoComments({ videoId }) {
                                         <BiCommentX size={20} onClick={cancelEdit} />
                                     </>
                                 ) : (
-                                    <BiCommentEdit onClick={() => handleEdit(index)} size={20} />
+                                    <BiCommentEdit onClick={() => handleEdit(index, comment)} size={20} />
                                 )}
                                 <MdDeleteOutline onClick={() => handleDelete(index)} size={20} />
                             </div>

@@ -132,7 +132,7 @@ function UserInfo() {
                     gender: gender,
                     profileImg: updatedProfileImg
                 };
-                console.log(newUser);
+               
                 const response = await fetch(`http://localhost:1324/api/users/${userId}`, {
                     method: 'PATCH',
                     headers: {

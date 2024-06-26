@@ -44,7 +44,7 @@ function Sidebar() {
           <a>
             <MdSubscriptions className='icon' />
           </a>
-          <span>Subscriptions</span>
+          <span style={{ paddingleft: '12px' }}>Subscriptions</span>
         </li>
 
 

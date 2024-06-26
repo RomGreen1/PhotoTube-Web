@@ -39,21 +39,21 @@ body {
 /* Media query for medium screens */
 @media (min-width: 768px) and (max-width: 1023px) {
   :root {
-    --icon-size: 0.5rem;
+    --icon-size: 0.8rem;
   }
 }
 
 /* Media query for larger screens */
 @media (min-width: 1024px) {
   :root {
-    --icon-size: 0.8rem;
+    --icon-size: 1.2rem;
   }
 }
 
 /* Media query for very large screens */
 @media (min-width: 1440px) {
   :root {
-    --icon-size: 1.2rem;
+    --icon-size: 1.5rem;
   }
 }
 

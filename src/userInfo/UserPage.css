@@ -1,54 +1,78 @@
-/* UserPage.css */
 .userProfile {
     width: 100%;
-    min-height: 100vh;
+    min-height: 90vh;
     padding: 20px;
-    margin: 0 auto;
+    margin-top: 5vh;
+    
     background: #fff;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: center; /* Center align items */
 }
 
-.section1{
-    width: 40%;
-}
-.section2{
-    width: 80%;
-}
-
-.profileHeader {
+.userProfileHeader {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start; /* Align to the left */
     width: 100%;
+    max-width: 1200px; /* Limit the width for better layout */
 }
 
-.profileImg {
+.userProfileImg {
     width: 100px;
     height: 100px;
     border-radius: 50%;
     margin-right: 20px;
 }
 
-.displayName {
+.userDisplayName {
     font-size: 24px;
     font-weight: bold;
 }
 
-.divider {
-    width: 100%;
+.userDivider {
+    width: 90vw;
     height: 1px;
     background-color: #ccc;
-    margin: 20px 0;
+    margin: 30px 0 30px 5vw;
+   
 }
 
-.mostViewedVideo, .videoList {
+.userMostViewedSection {
     width: 100%;
+    max-width: 1200px;
     text-align: center;
 }
 
-.videoItem {
+.userMostViewedVideo {
+    width: 100%;
+    display: flex;
+    justify-content: center; /* Center the video */
+}
+
+.userMostViewedVideoItem {
+    width: 100%;
+}
+.userMostViewedVideoItem .video-item{
+    margin-left: 10vw;
+    width:50em;
+}
+.userMostViewedVideoItem  video{
+    width:50em;
+    height: 35vh;
+}
+.userVideoList {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 1200px; /* Limit the width for better layout */
+}
+
+.userVideoItem {
+    width: calc(33.333% - 20px); /* Three videos per row with some spacing */
+    margin: 10px;
     border-bottom: 1px solid #eee;
     padding: 10px;
+    box-sizing: border-box;
 }

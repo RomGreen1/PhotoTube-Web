@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../context/UserContext';
-import { RiVideoAddLine, RiImageAddLine } from "react-icons/ri";
+import { RiVideoAddLine } from "react-icons/ri";
 import './AddVideo.css';
 
 function AddVideo() {
@@ -9,6 +9,7 @@ function AddVideo() {
     const navigate = useNavigate();
     const [videoTitle, setVideoTitle] = useState('');
     const [videoFile, setVideoFile] = useState(null);
+    const [errors, setErrors] = useState({});
 
     useEffect(() => {
         if (!user) {
@@ -28,13 +29,28 @@ function AddVideo() {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
+        // Validate inputs
+        const errors = {};
+        if (!videoTitle.trim()) {
+            errors.videoTitle = 'Video title is required.';
+        }
+        if (!videoFile) {
+            errors.videoFile = 'Video file is required.';
+        }else if (!videoFile.type.startsWith('video/')) {
+            errors.videoFile = 'Please upload a valid video file.';
+        }
+
+        if (Object.keys(errors).length > 0) {
+            setErrors(errors);
+            return;
+        }
+
         const newVideo = {
             title: videoTitle,
             views: 0,
         };
 
         try {
-
             if (videoFile) {
                 newVideo.videoUrl = await readFileAsDataURL(videoFile);
             } else {
@@ -72,15 +88,37 @@ function AddVideo() {
                 <h3>Add New Video</h3>
                 <div className="form-group">
                     <label>Video Title:</label>
-                    <input type="text" value={videoTitle} onChange={(e) => setVideoTitle(e.target.value)} />
+                    <input
+                        type="text"
+                        value={videoTitle}
+                        onChange={(e) => {
+                            setVideoTitle(e.target.value);
+                            if (e.target.value.trim()) {
+                                setErrors({ ...errors, videoTitle: '' });
+                            }
+                        }}
+                    />
+                    {errors.videoTitle && <div className="error-message">{errors.videoTitle}</div>}
                 </div>
                 <div className="form-group">
                     <label>Video:</label>
                     <span>
-                        <input type="file" id="videoFile" accept="video/*" hidden onChange={(e) => setVideoFile(e.target.files[0])} />
+                        <input
+                            type="file"
+                            id="videoFile"
+                            accept="video/*"
+                            hidden
+                            onChange={(e) => {
+                                setVideoFile(e.target.files[0]);
+                                if (e.target.files[0]) {
+                                    setErrors({ ...errors, videoFile: '' });
+                                }
+                            }}
+                        />
                         <label htmlFor="videoFile"><RiVideoAddLine size={40} /></label>
                         <span>{videoFile ? videoFile.name : 'No file chosen'}</span>
                     </span>
+                    {errors.videoFile && <div className="error-message">{errors.videoFile}</div>}
                 </div>
                 <div className="button-group">
                     <button type="submit" className="btn-confirm">Confirm Add <RiVideoAddLine /></button>

@@ -12,6 +12,7 @@ function UserInfo() {
     const [thumbnailImage, setThumbnailImage] = useState(null);
     const [profileImgPreview, setProfileImgPreview] = useState(''); // Start with empty string
     const [showModal, setShowModal] = useState(false);
+    const [errors, setErrors] = useState({});
 
     const [formData, setFormData] = useState({
         username: '',
@@ -67,32 +68,43 @@ function UserInfo() {
             ...formData,
             [name]: value,
         });
+        setErrors(prevErrors => ({
+            ...prevErrors,
+            [name]: ''
+        }));
     };
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
+        if (file && !file.type.startsWith('image/')) {
+            setErrors({ ...errors, profileImg: 'Please upload a valid image file.' });
+            return;
+        }
         setThumbnailImage(file);
+        setErrors({ ...errors, profileImg: '' });
     };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         const { username, displayname, password, gender, profileImg } = formData;
-        
-        // Check if all fields are filled
-        if (!displayname || !username || !gender || !password || (!profileImg && !thumbnailImage)) {
-            alert('You have to fill all the fields.');
+
+        // Validate inputs
+        const errors = {};
+        if (!displayname) errors.displayname = 'Display name is required.';
+        if (!username) errors.username = 'Username is required.';
+        if (!gender) errors.gender = 'Gender is required.';
+        if (!password) errors.password = 'Password is required.';
+        else if (password.length < 8 || !/\d/.test(password) || !/[a-zA-Z]/.test(password)) errors.password = 'Password must be at least 8 characters and include both letters and digits.';
+        if (!profileImg && !thumbnailImage) errors.profileImg = 'Profile image is required.';
+
+        if (Object.keys(errors).length > 0) {
+            setErrors(errors);
             return;
         }
-    
-        // Check if password has at least 8 characters and includes both letters and digits.
-        if (password.length < 8 || !/\d/.test(password) || !/[a-zA-Z]/.test(password)) {
-            alert('Password must be at least 8 characters and include both letters and digits.');
-            return;
-        }
-    
+
         const userId = localStorage.getItem('userId');
         const token = localStorage.getItem('token');
-    
+
         try {
             let updatedProfileImg = profileImg;
             if (thumbnailImage) {
@@ -113,7 +125,7 @@ function UserInfo() {
                         },
                         body: JSON.stringify(newUser),
                     });
-    
+
                     if (response.ok) {
                         const updatedUser = await response.json();
                         setUser(updatedUser.user);
@@ -132,7 +144,7 @@ function UserInfo() {
                     gender: gender,
                     profileImg: updatedProfileImg
                 };
-               
+
                 const response = await fetch(`http://localhost:1324/api/users/${userId}`, {
                     method: 'PATCH',
                     headers: {
@@ -141,7 +153,7 @@ function UserInfo() {
                     },
                     body: JSON.stringify(newUser),
                 });
-    
+
                 if (response.ok) {
                     const updatedUser = await response.json();
                     setUser(updatedUser.user);
@@ -156,8 +168,6 @@ function UserInfo() {
             console.error('Error updating user:', error);
         }
     };
-    
-
 
     useEffect(() => {
         if (thumbnailImage) {
@@ -228,6 +238,7 @@ function UserInfo() {
                         value={formData.displayname}
                         onChange={handleChange}
                     />
+                    {errors.displayname && <div className="error-message">{errors.displayname}</div>}
                 </div>
                 <div className="form-group">
                     <label>Password:</label>
@@ -237,6 +248,7 @@ function UserInfo() {
                         value={formData.password}
                         onChange={handleChange}
                     />
+                    {errors.password && <div className="error-message">{errors.password}</div>}
                 </div>
                 <div className="form-group">
                     <label>Gender:</label>
@@ -251,6 +263,7 @@ function UserInfo() {
                         <option value="female">Female</option>
                         <option value="other">Other</option>
                     </select>
+                    {errors.gender && <div className="error-message">{errors.gender}</div>}
                 </div>
                 <div className="form-group">
                     <label>ProfileImg:</label>
@@ -262,6 +275,7 @@ function UserInfo() {
                         <input type="file" id="thumbnailImage" accept="image/*" hidden onChange={handleImageChange} />
                         <span>{thumbnailImage ? thumbnailImage.name : 'No file chosen'}</span>
                     </span>
+                    {errors.profileImg && <div className="error-message">{errors.profileImg}</div>}
                 </div>
                 <div className="button-group">
                     <button type="submit" className="btn-confirm">Update</button>

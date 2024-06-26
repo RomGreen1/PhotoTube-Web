@@ -1,13 +1,11 @@
-// RegistrPage.js
 import { useNavigate } from 'react-router-dom';
-import { UserContext  } from '../context/UserContext';
+import { UserContext } from '../context/UserContext';
 import 'material-design-iconic-font/dist/css/material-design-iconic-font.min.css';
 import './RegisterPage.css';
 import React, { useState, useEffect, useContext } from 'react';
 
 function RegisterPage() {
-    
-    const {user} = useContext(UserContext);
+    const { user } = useContext(UserContext);
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         firstName: '',
@@ -20,27 +18,23 @@ function RegisterPage() {
         picture: null,
     });
     const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
+    const [errors, setErrors] = useState({});
 
     useEffect(() => {
         if (user) {
             navigate('/signin');
         }
+    }, [user, navigate]);
 
-    }, []);
-
-   
-    async function isExist (username) {
-        try{
-            
+    async function isExist(username) {
+        try {
             const response = await fetch(`http://localhost:1324/api/users/isExist?username=${username}`);
             const isExistValue = await response.json();
 
             if (!response.ok) throw new Error(isExistValue.message || 'Error checking username');
-            console.log(isExistValue)
             return isExistValue.exists;
-        }
-        catch(error){
-            console.error('Error:', error)
+        } catch (error) {
+            console.error('Error:', error);
             return true; // Return true to block registration if there's an error
         }
     }
@@ -64,78 +58,71 @@ function RegisterPage() {
                 [name]: value
             }));
         }
+        setErrors(prevErrors => ({
+            ...prevErrors,
+            [name]: ''
+        }));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const { firstName, lastName, username, email, gender, password, confirmPassword ,picture} = formData;
+        const { firstName, lastName, username, email, gender, password, confirmPassword, picture } = formData;
 
-            // Check if all fields are filled
-            if (!firstName || !lastName || !username || !email || !gender || !password || !confirmPassword || !picture ) {
-                alert('You have to fill all the fields.');
-                return;
-            }
-            // check password == confirm password
-            if (password !== confirmPassword) {
-                alert('Passwords do not match');
-                return;
-            }
-            // Validation for username length
-            if (username.length < 4) {
-                alert('Username must be at least 4 characters long.');
-                return;
-            }
-    
-            // Validation for password complexity
-            if (!password.match(/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/)) {
-                alert('Password must contain at least 1 number and 1 letter.');
-                return;
-            }
-            // check if password has at least 8 characters and include both letters and digits.
-            if (password.length < 8 || !/\d/.test(password) || !/[a-zA-Z]/.test(password)) {
-                alert('Password must be at least 8 characters and include both letters and digits.');
-                return;
-            }
-            if (await isExist(username)) {
-                alert('Username exists or there was an error, registration is blocked');
-                return;
-            }
-            else
-            {
-                 // Proceed to create new user
-                const newUser = {
-                    username,
-                    password,
-                    displayname: `${firstName} ${lastName}`,
-                    gender,
-                    profileImg: imagePreviewUrl
-                };
-                try{
-                    const response = await fetch('http://localhost:1324/api/users', {
-                        method: 'POST',
-                        headers: {
-                          'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(newUser),
-                      });
-                      const data = await response.json();
+        // Validate inputs
+        const errors = {};
+        if (!firstName) errors.firstName = 'First name is required.';
+        if (!lastName) errors.lastName = 'Last name is required.';
+        if (!username) errors.username = 'Username is required.';
+        else if (username.length < 4) errors.username = 'Username must be at least 4 characters long.';
+        if (!email) errors.email = 'Email is required.';
+        if (!gender) errors.gender = 'Gender is required.';
+        if (!password) errors.password = 'Password is required.';
+        else if (password.length < 8) errors.password = 'Password must be at least 8 characters long.';
+        else if (!/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/.test(password)) errors.password = 'Password must contain at least 1 number and 1 letter.';
+        if (!confirmPassword) errors.confirmPassword = 'Confirm password is required.';
+        else if (password !== confirmPassword) errors.confirmPassword = 'Passwords do not match.';
+        if (!picture) errors.picture = 'Please upload a valid img file.';
+        if(picture) if(!picture.type.startsWith('image/')) errors.picture = '';
+        if (Object.keys(errors).length > 0) {
+            setErrors(errors);
+            return;
+        }
 
-                      if (response.ok) {
-                        alert('Registration successful!');
-                        navigate('/signin');
-                        
-                      } else {
-                        console.error('Registration error:', data);
-                        alert('An error occurred. Please try again.');
-                      }
-                }
-                catch(error)
-                {
-                    console.error('There was an error!', error);
-                    alert('An error occurred. Please try again.');
-                }
+        if (await isExist(username)) {
+            alert('Username exists or there was an error, registration is blocked');
+            return;
+        }
+
+        // Proceed to create new user
+        const newUser = {
+            username,
+            password,
+            displayname: `${firstName} ${lastName}`,
+            gender,
+            profileImg: imagePreviewUrl
+        };
+
+        try {
+            const response = await fetch('http://localhost:1324/api/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newUser),
+            });
+            const data = await response.json();
+
+            if (response.ok) {
+                alert('Registration successful!');
+                navigate('/signin');
+            } else {
+                console.error('Registration error:', data);
+                alert('An error occurred. Please try again.');
             }
-        
+        } catch (error) {
+            console.error('There was an error!', error);
+            alert('An error occurred. Please try again.');
+        }
     };
 
     return (
@@ -152,6 +139,7 @@ function RegisterPage() {
                             value={formData.firstName}
                             onChange={handleChange}
                         />
+                      
                         <input
                             type="text"
                             placeholder="Last Name"
@@ -160,6 +148,11 @@ function RegisterPage() {
                             value={formData.lastName}
                             onChange={handleChange}
                         />
+                       
+                    </div>
+                    <div  className="form-group">
+                    {errors.firstName && <div className="error-message">{errors.firstName}</div>}
+                    {errors.lastName && <div className="error-message">{errors.lastName}</div>}
                     </div>
                     <div className="form-wrapper">
                         <input
@@ -170,6 +163,7 @@ function RegisterPage() {
                             value={formData.username}
                             onChange={handleChange}
                         />
+                        {errors.username && <div className="error-message">{errors.username}</div>}
                         <i className="zmdi zmdi-account"></i>
                     </div>
                     <div className="form-wrapper">
@@ -181,6 +175,7 @@ function RegisterPage() {
                             value={formData.email}
                             onChange={handleChange}
                         />
+                        {errors.email && <div className="error-message">{errors.email}</div>}
                         <i className="zmdi zmdi-email"></i>
                     </div>
                     <div className="form-wrapper">
@@ -195,6 +190,7 @@ function RegisterPage() {
                             <option value="female">Female</option>
                             <option value="other">Other</option>
                         </select>
+                        {errors.gender && <div className="error-message">{errors.gender}</div>}
                     </div>
                     <div className="form-wrapper">
                         <input
@@ -205,6 +201,7 @@ function RegisterPage() {
                             value={formData.password}
                             onChange={handleChange}
                         />
+                        {errors.password && <div className="error-message">{errors.password}</div>}
                         <i className="zmdi zmdi-lock"></i>
                     </div>
                     <div className="form-wrapper">
@@ -216,6 +213,7 @@ function RegisterPage() {
                             value={formData.confirmPassword}
                             onChange={handleChange}
                         />
+                        {errors.confirmPassword && <div className="error-message">{errors.confirmPassword}</div>}
                         <i className="zmdi zmdi-lock"></i>
                     </div>
                     <div className="form-wrapper">
@@ -224,6 +222,7 @@ function RegisterPage() {
                             name="picture"
                             onChange={handleChange}
                         />
+                        {errors.picture && <div className="error-message">{errors.picture}</div>}
                         {imagePreviewUrl && (
                             <img
                                 src={imagePreviewUrl}

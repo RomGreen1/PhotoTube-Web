@@ -3,6 +3,8 @@ import './VideoComments.css';
 import { MdDeleteOutline } from "react-icons/md";
 import { BiCommentCheck, BiCommentX, BiCommentEdit, BiShare } from "react-icons/bi";
 import { UserContext } from '../../context/UserContext';
+import ConfirmationModal from '../../confirmModal/ConfirmationModal'; // Adjust the import path as needed
+import { useNavigate } from 'react-router-dom';
 
 function VideoComments({ video }) {
     const [newComment, setNewComment] = useState('');
@@ -11,8 +13,12 @@ function VideoComments({ video }) {
     const [editing, setEditing] = useState(false);
     const { user } = useContext(UserContext);
     const [comments, setComments] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const [commentIndexToDelete, setCommentIndexToDelete] = useState(null);
+    const navigate = useNavigate();
     const userId = localStorage.getItem('userId');
     const token = localStorage.getItem('token');
+
     useEffect(() => {
         const fetchComments = async () => {
             try {
@@ -28,7 +34,7 @@ function VideoComments({ video }) {
         };
     
         fetchComments();
-    }, [video,comments]);
+    }, [video, comments]);
 
     const handleAddComment = async () => {
         if (!newComment.trim()) {
@@ -68,7 +74,6 @@ function VideoComments({ video }) {
             return;
         }
 
-        const token = localStorage.getItem('token');
         const commentId = comments[editingIndex]._id; // Get the comment ID
 
         const commentData = {
@@ -102,9 +107,14 @@ function VideoComments({ video }) {
         }
     };
 
-    const handleDelete = async (index) => {
+    const handleDelete = (index) => {
+        setCommentIndexToDelete(index);
+        setShowModal(true);
+    };
+
+    const confirmDelete = async () => {
         const token = localStorage.getItem('token');
-        const commentId = comments[index]._id; // Get the comment ID
+        const commentId = comments[commentIndexToDelete]._id; // Get the comment ID
 
         try {
             const response = await fetch(`http://localhost:1324/api/users/${commentId}/comments`, {
@@ -118,15 +128,17 @@ function VideoComments({ video }) {
                 throw new Error('Failed to delete comment');
             }
 
-            const updatedComments = comments.filter((_, i) => i !== index);
+            const updatedComments = comments.filter((_, i) => i !== commentIndexToDelete);
             setComments(updatedComments);
-            if (editingIndex === index) {
+            if (editingIndex === commentIndexToDelete) {
                 setEditingIndex(-1); // Reset editing index if the deleted comment was being edited
                 setEditing(false); // Exit editing mode
                 setEditComment(''); // Clear the editComment state
             }
         } catch (error) {
             console.error('Error deleting comment:', error);
+        } finally {
+            setShowModal(false); // Hide the modal after deletion
         }
     };
 
@@ -151,6 +163,11 @@ function VideoComments({ video }) {
         });
     };
 
+    const handleUserClick = (userId) => {
+        navigate(`/userPage/${userId}`);
+    
+      };
+
     return (
         <div className="comments-section">
             <h3>Comments</h3>
@@ -158,7 +175,7 @@ function VideoComments({ video }) {
             {comments.map((comment, index) => (
                 <div key={index} className="comment">
                     <div className="comment-header">
-                        <img src={comment.userProfileImg} alt="avatar" className="comment-avatar" />
+                        <img src={comment.userProfileImg} alt="avatar" onClick={() => handleUserClick(comment.createdBy)} className="comment-avatar" />
                         <div className="comment-author">
                             <strong>{comment.username}</strong>
                             <span className="comment-date">{formatDate(comment.date)}</span>
@@ -176,22 +193,21 @@ function VideoComments({ video }) {
                             <span className="comment-text">{comment.text}</span>
                         )}
                         <div id={`d_${index}`} className="comment-actions">
-    <BiShare size={20} />
-    {user && userId === comment.createdBy && (
-        <>
-            {editingIndex === index ? (
-                <>
-                    <BiCommentCheck size={20} onClick={handleUpdateComment} />
-                    <BiCommentX size={20} onClick={cancelEdit} />
-                </>
-            ) : (
-                <BiCommentEdit onClick={() => handleEdit(index, comment)} size={20} />
-            )}
-            <MdDeleteOutline onClick={() => handleDelete(index)} size={20} />
-        </>
-    )}
-</div>
-
+                            <BiShare size={20} />
+                            {user && userId === comment.createdBy && (
+                                <>
+                                    {editingIndex === index ? (
+                                        <>
+                                            <BiCommentCheck size={20} onClick={handleUpdateComment} />
+                                            <BiCommentX size={20} onClick={cancelEdit} />
+                                        </>
+                                    ) : (
+                                        <BiCommentEdit onClick={() => handleEdit(index, comment)} size={20} />
+                                    )}
+                                    <MdDeleteOutline onClick={() => handleDelete(index)} size={20} />
+                                </>
+                            )}
+                        </div>
                     </div>
                 </div>
             ))}
@@ -210,6 +226,12 @@ function VideoComments({ video }) {
                 </form>
             )}
             <div style={{ height: "30px" }}></div> {/* Spacer div */}
+            <ConfirmationModal
+                show={showModal}
+                onClose={() => setShowModal(false)}
+                onConfirm={confirmDelete}
+                name="comment"
+            />
         </div>
     );
 }

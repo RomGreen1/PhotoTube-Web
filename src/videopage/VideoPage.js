@@ -150,12 +150,11 @@ function VideoPage() {
       console.error('Error disliking video:', error);
     }
   };
-
   const handleUserClick = () => {
     navigate(`/userPage/${userIdCreater}`);
-    console.log('videoC:' ,videoC);
 
   };
+
 
   const userHasLiked = videoC?.likes?.some(like => like.userId === loggedId && like.action === 'like');
   const userHasDisliked = videoC?.likes?.some(like => like.userId === loggedId && like.action === 'dislike');
@@ -194,9 +193,9 @@ function VideoPage() {
 
                 <div className='video-img-dir-page'>
                   <div>
-                    <img className='video-img-page' src={videoC.creatorImg} alt="video thumbnail" /><span> {videoC.createdBy}</span>
+                    <img className='video-img-page' onClick={handleUserClick} src={videoC.creatorImg} alt="video thumbnail" /><span> {videoC.createdBy}</span>
                   </div>
-                  <button className="username-btn" onClick={handleUserClick}>{videoC.createdBy}</button>
+                  
 
                   <div className="like-dislike-container">
                     <div className="like-dislike-button">

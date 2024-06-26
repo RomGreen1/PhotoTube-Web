@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { RiVideoAddLine } from "react-icons/ri";
 import './UpdateVideoModal.css';
 
-function UpdateVideoModal({ show, onClose, pid, id, video,onUpdate  }) {
+function UpdateVideoModal({ show, onClose, pid, id, video, onUpdate }) {
   const [videoTitle, setVideoTitle] = useState(video.title);
   const [videoFile, setVideoFile] = useState(null);
   const [videoBase64, setVideoBase64] = useState(video.videoUrl);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (video) {
@@ -17,8 +18,14 @@ function UpdateVideoModal({ show, onClose, pid, id, video,onUpdate  }) {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      if (!file.type.startsWith('video/')) {
+        setErrors({ ...errors, videoFile: 'Please upload a valid video file.' });
+        return;
+      }
+
       setVideoFile(file);
-      
+      setErrors({ ...errors, videoFile: '' });
+
       // Convert file to base64
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -30,6 +37,20 @@ function UpdateVideoModal({ show, onClose, pid, id, video,onUpdate  }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    // Validate inputs
+    const errors = {};
+    if (!videoTitle.trim()) {
+      errors.videoTitle = 'Video title is required.';
+    }
+    if (!videoFile && !videoBase64) {
+      errors.videoFile = 'Video file is required.';
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);
+      return;
+    }
 
     const token = localStorage.getItem('token');
 
@@ -54,7 +75,7 @@ function UpdateVideoModal({ show, onClose, pid, id, video,onUpdate  }) {
 
       const updatedVideo = await response.json();
       onUpdate(updatedVideo);
-      alert('Updated Successfully');     
+      alert('Updated Successfully');
       onClose();
     } catch (error) {
       console.error('Error updating video:', error);
@@ -73,6 +94,7 @@ function UpdateVideoModal({ show, onClose, pid, id, video,onUpdate  }) {
           <div className="form-group">
             <label>Video Title:</label>
             <input type="text" value={videoTitle} onChange={(e) => setVideoTitle(e.target.value)} />
+            {errors.videoTitle && <div className="error-message">{errors.videoTitle}</div>}
           </div>
           <div className="form-group">
             <label>
@@ -83,6 +105,7 @@ function UpdateVideoModal({ show, onClose, pid, id, video,onUpdate  }) {
               <label htmlFor="videoFile"><RiVideoAddLine size={40} /></label>
               <span> {videoFile ? videoFile.name : 'Click to change the video'}</span>
             </span>
+            {errors.videoFile && <div className="error-message">{errors.videoFile}</div>}
           </div>
           <div className="button-group">
             <button type="submit" className="btn-confirm">Update Video</button>

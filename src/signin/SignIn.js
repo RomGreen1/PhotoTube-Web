@@ -92,7 +92,7 @@ function SignIn() {
                 </div>
                 <button type="submit" className="login">Login</button>
                 <div className="footer">
-                    <span onClick={() => navigate('/registr')} >Sign up</span>
+                    <span onClick={() => navigate('/register')} >Sign up</span>
                     <span >Forgot Password?</span>
                 </div>
             </form>

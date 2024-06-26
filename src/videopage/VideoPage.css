@@ -273,6 +273,7 @@
   .video-img-page {
     width: 40px;
     height: 40px;
+    cursor: pointer;
   }
 
   .views-time {
@@ -300,7 +301,7 @@
 /* Media query for screens larger than 1440px */
 @media (min-width: 1440px) {
   .video-player-page video {
-    width: 70em; 
+    width: 80em; 
     height: 60vh; 
   }
 

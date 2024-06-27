@@ -17,7 +17,9 @@ function UserInfo() {
     const [formData, setFormData] = useState({
         username: '',
         displayname: '',
+        email: '',
         password: '',
+        confirmPassword: '',
         gender: '',
         profileImg: '',
     });
@@ -42,8 +44,10 @@ function UserInfo() {
                     const userDetailsJson = await userDetailsResponse.json();
                     setFormData({
                         username: userDetailsJson.username,
-                        displayname: userDetailsJson.displayname,
+                        displayname: userDetailsJson.displayname || '',
+                        email: userDetailsJson.email || '',
                         password: userDetailsJson.password,
+                        confirmPassword: '',
                         gender: userDetailsJson.gender,
                         profileImg: userDetailsJson.profileImg || '',
                     });
@@ -86,15 +90,18 @@ function UserInfo() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const { username, displayname, password, gender, profileImg } = formData;
+        const { username, displayname, email, password, confirmPassword, gender, profileImg } = formData;
 
         // Validate inputs
         const errors = {};
         if (!displayname) errors.displayname = 'Display name is required.';
+        if (!email) errors.email = 'Email is required.';
         if (!username) errors.username = 'Username is required.';
         if (!gender) errors.gender = 'Gender is required.';
         if (!password) errors.password = 'Password is required.';
         else if (password.length < 8 || !/\d/.test(password) || !/[a-zA-Z]/.test(password)) errors.password = 'Password must be at least 8 characters and include both letters and digits.';
+        if (!confirmPassword) errors.confirmPassword = 'Confirm password is required.';
+        else if (password !== confirmPassword) errors.confirmPassword = 'Passwords do not match.';
         if (!profileImg && !thumbnailImage) errors.profileImg = 'Profile image is required.';
 
         if (Object.keys(errors).length > 0) {
@@ -111,10 +118,13 @@ function UserInfo() {
                 const reader = new FileReader();
                 reader.onloadend = async () => {
                     updatedProfileImg = reader.result;
+                    // Proceed to update user
                     const newUser = {
-                        displayname: displayname,
-                        password: password,
-                        gender: gender,
+                        username,
+                        password,
+                        displayname,
+                        email,
+                        gender,
                         profileImg: updatedProfileImg
                     };
                     const response = await fetch(`http://localhost:1324/api/users/${userId}`, {
@@ -138,11 +148,14 @@ function UserInfo() {
                 };
                 reader.readAsDataURL(thumbnailImage);
             } else {
+                // Proceed to update user
                 const newUser = {
-                    displayname: displayname,
-                    password: password,
-                    gender: gender,
-                    profileImg: updatedProfileImg
+                    username,
+                    password,
+                    displayname,
+                    email,
+                    gender,
+                    profileImg
                 };
 
                 const response = await fetch(`http://localhost:1324/api/users/${userId}`, {
@@ -231,7 +244,7 @@ function UserInfo() {
                     <input type="text" value={formData.username} readOnly />
                 </div>
                 <div className="form-group">
-                    <label>Displayname:</label>
+                    <label>Display Name:</label>
                     <input
                         type="text"
                         name="displayname"
@@ -239,6 +252,16 @@ function UserInfo() {
                         onChange={handleChange}
                     />
                     {errors.displayname && <div className="error-message">{errors.displayname}</div>}
+                </div>
+                <div className="form-group">
+                    <label>Email:</label>
+                    <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                    />
+                    {errors.email && <div className="error-message">{errors.email}</div>}
                 </div>
                 <div className="form-group">
                     <label>Password:</label>
@@ -249,6 +272,16 @@ function UserInfo() {
                         onChange={handleChange}
                     />
                     {errors.password && <div className="error-message">{errors.password}</div>}
+                </div>
+                <div className="form-group">
+                    <label>Confirm Password:</label>
+                    <input
+                        type="password"
+                        name="confirmPassword"
+                        value={formData.confirmPassword}
+                        onChange={handleChange}
+                    />
+                    {errors.confirmPassword && <div className="error-message">{errors.confirmPassword}</div>}
                 </div>
                 <div className="form-group">
                     <label>Gender:</label>

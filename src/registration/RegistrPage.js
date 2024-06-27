@@ -98,6 +98,7 @@ function RegisterPage() {
             username,
             password,
             displayname: `${firstName} ${lastName}`,
+            email,
             gender,
             profileImg: imagePreviewUrl
         };

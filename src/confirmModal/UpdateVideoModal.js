@@ -5,13 +5,11 @@ import './UpdateVideoModal.css';
 function UpdateVideoModal({ show, onClose, pid, id, video, onUpdate }) {
   const [videoTitle, setVideoTitle] = useState(video.title);
   const [videoFile, setVideoFile] = useState(null);
-  const [videoBase64, setVideoBase64] = useState(video.videoUrl);
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (video) {
       setVideoTitle(video.title);
-      setVideoBase64(video.videoUrl);
     }
   }, [video]);
 
@@ -25,13 +23,6 @@ function UpdateVideoModal({ show, onClose, pid, id, video, onUpdate }) {
 
       setVideoFile(file);
       setErrors({ ...errors, videoFile: '' });
-
-      // Convert file to base64
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onloadend = () => {
-        setVideoBase64(reader.result);
-      };
     }
   };
 
@@ -43,7 +34,7 @@ function UpdateVideoModal({ show, onClose, pid, id, video, onUpdate }) {
     if (!videoTitle.trim()) {
       errors.videoTitle = 'Video title is required.';
     }
-    if (!videoFile && !videoBase64) {
+    if (!videoFile && !video.videoUrl) {
       errors.videoFile = 'Video file is required.';
     }
 
@@ -54,19 +45,19 @@ function UpdateVideoModal({ show, onClose, pid, id, video, onUpdate }) {
 
     const token = localStorage.getItem('token');
 
-    const updatedVideoData = {
-      title: videoTitle,
-      videoUrl: videoBase64,
-    };
+    const formData = new FormData();
+    formData.append('title', videoTitle);
+    if (videoFile) {
+      formData.append('videoFile', videoFile);
+    }
 
     try {
       const response = await fetch(`http://localhost:1324/api/users/${id}/videos/${pid}`, {
         method: 'PATCH',
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(updatedVideoData),
+        body: formData,
       });
 
       if (!response.ok) {

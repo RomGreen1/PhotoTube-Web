@@ -81,8 +81,9 @@ function RegisterPage() {
         else if (!/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/.test(password)) errors.password = 'Password must contain at least 1 number and 1 letter.';
         if (!confirmPassword) errors.confirmPassword = 'Confirm password is required.';
         else if (password !== confirmPassword) errors.confirmPassword = 'Passwords do not match.';
-        if (!picture) errors.picture = 'Please upload a valid img file.';
-        if(picture) if(!picture.type.startsWith('image/')) errors.picture = '';
+        if (!picture) errors.picture = 'Please upload a valid image file.';
+        if (picture && !picture.type.startsWith('image/')) errors.picture = 'Please upload a valid image file.';
+
         if (Object.keys(errors).length > 0) {
             setErrors(errors);
             return;
@@ -93,23 +94,19 @@ function RegisterPage() {
             return;
         }
 
-        // Proceed to create new user
-        const newUser = {
-            username,
-            password,
-            displayname: `${firstName} ${lastName}`,
-            email,
-            gender,
-            profileImg: imagePreviewUrl
-        };
+        // Proceed to create new user using FormData
+        const newUser = new FormData();
+        newUser.append('username', username);
+        newUser.append('password', password);
+        newUser.append('displayname', `${firstName} ${lastName}`);
+        newUser.append('email', email);
+        newUser.append('gender', gender);
+        newUser.append('profileImg', picture);
 
         try {
             const response = await fetch('http://localhost:1324/api/users', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(newUser),
+                body: newUser,
             });
             const data = await response.json();
 

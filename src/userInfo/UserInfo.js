@@ -112,70 +112,34 @@ function UserInfo() {
         const userId = localStorage.getItem('userId');
         const token = localStorage.getItem('token');
 
+        // Create a FormData object to send the data
+        const formDataToSend = new FormData();
+        formDataToSend.append('username', username);
+        formDataToSend.append('password', password);
+        formDataToSend.append('displayname', displayname);
+        formDataToSend.append('email', email);
+        formDataToSend.append('gender', gender);
+        if (thumbnailImage) {
+            formDataToSend.append('profileImg', thumbnailImage);
+        }
+
         try {
-            let updatedProfileImg = profileImg;
-            if (thumbnailImage) {
-                const reader = new FileReader();
-                reader.onloadend = async () => {
-                    updatedProfileImg = reader.result;
-                    // Proceed to update user
-                    const newUser = {
-                        username,
-                        password,
-                        displayname,
-                        email,
-                        gender,
-                        profileImg: updatedProfileImg
-                    };
-                    const response = await fetch(`http://localhost:1324/api/users/${userId}`, {
-                        method: 'PATCH',
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(newUser),
-                    });
+            const response = await fetch(`http://localhost:1324/api/users/${userId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                body: formDataToSend,
+            });
 
-                    if (response.ok) {
-                        const updatedUser = await response.json();
-                        setUser(updatedUser.user);
-                        alert('User updated successfully!');
-                        navigate('/');
-                    } else {
-                        const errorData = await response.json();
-                        alert(`Error: ${errorData.message}`);
-                    }
-                };
-                reader.readAsDataURL(thumbnailImage);
+            if (response.ok) {
+                const updatedUser = await response.json();
+                setUser(updatedUser.user);
+                alert('User updated successfully!');
+                navigate('/');
             } else {
-                // Proceed to update user
-                const newUser = {
-                    username,
-                    password,
-                    displayname,
-                    email,
-                    gender,
-                    profileImg
-                };
-
-                const response = await fetch(`http://localhost:1324/api/users/${userId}`, {
-                    method: 'PATCH',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(newUser),
-                });
-
-                if (response.ok) {
-                    const updatedUser = await response.json();
-                    setUser(updatedUser.user);
-                    alert('User updated successfully!');
-                    navigate('/');
-                } else {
-                    const errorData = await response.json();
-                    alert(`Error: ${errorData.message}`);
-                }
+                const errorData = await response.json();
+                alert(`Error: ${errorData.message}`);
             }
         } catch (error) {
             console.error('Error updating user:', error);

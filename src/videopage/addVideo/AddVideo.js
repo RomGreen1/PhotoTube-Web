@@ -17,15 +17,6 @@ function AddVideo() {
         }
     }, [user, navigate]);
 
-    const readFileAsDataURL = (file) => {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onloadend = () => resolve(reader.result);
-            reader.onerror = reject;
-            reader.readAsDataURL(file);
-        });
-    };
-
     const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -36,7 +27,7 @@ function AddVideo() {
         }
         if (!videoFile) {
             errors.videoFile = 'Video file is required.';
-        }else if (!videoFile.type.startsWith('video/')) {
+        } else if (!videoFile.type.startsWith('video/')) {
             errors.videoFile = 'Please upload a valid video file.';
         }
 
@@ -45,27 +36,19 @@ function AddVideo() {
             return;
         }
 
-        const newVideo = {
-            title: videoTitle,
-            views: 0,
-        };
+        const formData = new FormData();
+        formData.append('title', videoTitle);
+        formData.append('video', videoFile);
 
         try {
-            if (videoFile) {
-                newVideo.videoUrl = await readFileAsDataURL(videoFile);
-            } else {
-                newVideo.videoUrl = '';
-            }
-
-            const userId = localStorage.getItem('C');
+            const userId = localStorage.getItem('userId');
             const token = localStorage.getItem('token');
             const response = await fetch(`http://localhost:1324/api/users/${userId}/videos`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
+                    'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify(newVideo),
+                body: formData
             });
             const data = await response.json();
 

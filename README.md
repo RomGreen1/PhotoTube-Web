@@ -38,15 +38,15 @@ Clone the repository and install the necessary dependencies:
 git clone https://github.com/DavidIzhaki/Phottubee
 cd Phottubee_Web
 npm install
-\```
+
 
 The Phottubee_Server comes with the latest build of the Phottubee_Web application pre-installed, so you don't need to run the React development client to access the web interface.
 
 If you prefer to run the Phottubee_Web separately, you can use the following command:
 
-\```bash
+```bash
 npm start
-\```
+
 
 ### Note
 

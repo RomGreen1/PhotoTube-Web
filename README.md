@@ -1,70 +1,51 @@
-# Getting Started with Create React App
+# Phottubee_Web
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Phottubee_Web is the React-based frontend for the Phottubee social media platform, designed to seamlessly integrate with the Phottubee_Server's API endpoints. This client-side application offers users an intuitive interface to interact with the platform's key features, including video creation, commenting on videos, user profile customization, and adding users.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+### Offline Features
+- **HomePage**: Users can see the first 10 most viewed videos and 10 additional videos randomly selected. The videos are shown in a random order.
+- **Adding User**: Click on 'Register' in the left menu, fill in your information, and register.
+- **Login**: Click on 'Login' in the left menu, fill in your information, and log in.
+- **VideoPage**: When you click on a video, you can see the video along with a list of other videos on the side.
+- **UserPage**: When you click on a user's image under a video, you can see all of the user's videos and the most viewed video.
 
-### `npm start`
+### Login Features
+- **VideoPage**:
+  1. Make, delete, and update a comment.
+  2. Like or dislike the video.
+  3. If you created the video, you can edit or delete it.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **UserInfo**: Edit your profile by changing the information that is already there.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **AddVideo**: You can add a video under your name.
 
-### `npm test`
+## Getting Started
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+To fully utilize the features of Phottubee_Web, make sure that the Phottubee_Server is up and running, as this frontend application depends on its API endpoints for data.
 
-### `npm run build`
+### Prerequisites
+- A working instance of Phottubee_Server
+- Node.js
+- npm or yarn
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Installation
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Clone the repository and install the necessary dependencies:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+git clone https://github.com/DavidIzhaki/Phottubee
+cd Phottubee
+npm install
 
-### `npm run eject`
+The Phottubee_Server comes with the latest build of the Phottubee_Web application pre-installed, so you don't need to run the React development client to access the web interface.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+If you prefer to run the Phottubee_Web separately, you can use the following command:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+npm start
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Phottubee_Web is the frontend component of the Phottubee social media platform. To take advantage of all its features, such as video posting, commenting, and profile management, the backend server (Phottubee_Server) needs to be running.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+For more information on setting up and running the backend, refer to the Phottubee_Server README at https://github.com/DavidIzhaki/Phottubee_Server.

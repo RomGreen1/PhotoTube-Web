@@ -34,7 +34,7 @@ To fully utilize the features of Phottubee_Web, make sure that the Phottubee_Ser
 
 Clone the repository and install the necessary dependencies:
 
-\```bash
+```bash
 git clone https://github.com/DavidIzhaki/Phottubee
 cd Phottubee_Web
 npm install

@@ -34,18 +34,23 @@ To fully utilize the features of Phottubee_Web, make sure that the Phottubee_Ser
 
 Clone the repository and install the necessary dependencies:
 
-```bash
+\```bash
 git clone https://github.com/DavidIzhaki/Phottubee
-cd Phottubee
+cd Phottubee_Web
 npm install
+\```
 
 The Phottubee_Server comes with the latest build of the Phottubee_Web application pre-installed, so you don't need to run the React development client to access the web interface.
 
 If you prefer to run the Phottubee_Web separately, you can use the following command:
 
-```bash
+\```bash
 npm start
+\```
+
+### Note
 
 Phottubee_Web is the frontend component of the Phottubee social media platform. To take advantage of all its features, such as video posting, commenting, and profile management, the backend server (Phottubee_Server) needs to be running.
 
-For more information on setting up and running the backend, refer to the Phottubee_Server README at https://github.com/DavidIzhaki/Phottubee_Server.
+For more information on setting up and running the backend, refer to the Phottubee_Server README at [https://github.com/DavidIzhaki/Phottubee](https://github.com/DavidIzhaki/Phottubee).
+

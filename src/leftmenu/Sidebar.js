@@ -72,7 +72,7 @@ function Sidebar() {
             </li>
             <li>
               <div className="icon-container-user-info" onClick={() => navigate('/userInfo')}>
-                <img src={user.profileImg}  className="user-avatar" />
+                <img src={`http://localhost:${user.profileImg}`}  className="user-avatar" />
                 <span>{user.displayname}</span>
               </div>
             </li>

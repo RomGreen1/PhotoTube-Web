@@ -14,16 +14,22 @@ const UserPage = () => {
             try {
                 const videosResponse = await fetch(`http://localhost:1324/api/users/${id}/videos`);
                 const videosData = await videosResponse.json();
+        
                 setVideosList(videosData);
-
+        
                 if (videosData.length > 0) {
                     const maxViewed = videosData.reduce((prev, current) => (prev.views > current.views) ? prev : current);
                     setMostViewedVideo(maxViewed);
+                    // Filter out the most viewed video from the list
+                    const updatedVideosList = videosData.filter(video => video._id !== maxViewed._id);
+                    setVideosList(updatedVideosList);
                 }
             } catch (error) {
                 console.error('Error fetching user data:', error);
             }
         };
+        
+        
 
         fetchUserData();
     }, [id]);

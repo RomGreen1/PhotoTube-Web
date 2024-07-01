@@ -21,7 +21,6 @@ function VideoItem({ video }) {
 
   const handleUserClick = () => {
     navigate(`/userPage/${video.userId}`);
-
   };
 
   return (

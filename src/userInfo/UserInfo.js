@@ -13,6 +13,7 @@ function UserInfo() {
     const [profileImgPreview, setProfileImgPreview] = useState(''); // Start with empty string
     const [showModal, setShowModal] = useState(false);
     const [errors, setErrors] = useState({});
+    const [initialEmail, setInitialEmail] = useState(''); // Store the initial email
 
     const [formData, setFormData] = useState({
         username: '',
@@ -42,6 +43,7 @@ function UserInfo() {
                     }
 
                     const userDetailsJson = await userDetailsResponse.json();
+                    setInitialEmail(userDetailsJson.email); // Set initial email
                     setFormData({
                         username: userDetailsJson.username,
                         displayname: userDetailsJson.displayname || '',
@@ -95,7 +97,6 @@ function UserInfo() {
         // Validate inputs
         const errors = {};
         if (!displayname) errors.displayname = 'Display name is required.';
-        if (!email) errors.email = 'Email is required.';
         if (!username) errors.username = 'Username is required.';
         if (!gender) errors.gender = 'Gender is required.';
         if (!password) errors.password = 'Password is required.';
@@ -117,7 +118,7 @@ function UserInfo() {
         formDataToSend.append('username', username);
         formDataToSend.append('password', password);
         formDataToSend.append('displayname', displayname);
-        formDataToSend.append('email', email);
+        formDataToSend.append('email', email === initialEmail ? '' : email); // Set email to '' if it hasn't changed
         formDataToSend.append('gender', gender);
         if (thumbnailImage) {
             formDataToSend.append('profileImg', thumbnailImage);
@@ -139,7 +140,7 @@ function UserInfo() {
                 navigate('/');
             } else {
                 const errorData = await response.json();
-                alert(`Error: ${errorData.message}`);
+                alert(errorData.message);
             }
         } catch (error) {
             console.error('Error updating user:', error);
@@ -263,7 +264,7 @@ function UserInfo() {
                     {errors.gender && <div className="error-message">{errors.gender}</div>}
                 </div>
                 <div className="form-group">
-                    <label>ProfileImg:</label>
+                    <label>Profile Image:</label>
                     <div>
                         <img src={profileImgPreview} alt="Profile" style={{ width: '100px', height: '100px', objectFit: 'cover' }} />
                     </div>

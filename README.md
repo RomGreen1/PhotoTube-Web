@@ -9,7 +9,7 @@ Phottubee_Web is the React-based frontend for the Phottubee social media platfor
 - **Adding User**: Click on 'Register' in the left menu, fill in your information, and register.
 - **Login**: Click on 'Login' in the left menu, fill in your information, and log in.
 - **VideoPage**: When you click on a video, you can see the video along with a list of other videos on the side.
-- **UserPage**: When you click on a user's image under a video, you can see all of the user's videos and the most viewed video.
+- **UserPage**: When you click on a user's image under a video or on the left side icon, you can see all of the user's videos and the most viewed video.
 
 ### Login Features
 - **VideoPage**:
@@ -17,7 +17,7 @@ Phottubee_Web is the React-based frontend for the Phottubee social media platfor
   2. Like or dislike the video.
   3. If you created the video, you can edit or delete it.
 
-- **UserInfo**: Edit your profile by changing the information that is already there.
+- **UserInfo**: Edit your profile by changing the information that is already there. You can go there by clicking the Profile on the left menu after you login.
 
 - **AddVideo**: You can add a video under your name.
 
@@ -52,4 +52,4 @@ npm start
 
 Phottubee_Web is the frontend component of the Phottubee social media platform. To take advantage of all its features, such as video posting, commenting, and profile management, the backend server (Phottubee_Server) needs to be running.
 
-For more information on setting up and running the backend, refer to the Phottubee_Server README at [https://github.com/DavidIzhaki/Phottubee_Server](https://github.com/DavidIzhaki/Phottubee_Server).
+For more information on setting up and running the backend, refer to the Phottubee_Server README at [https://github.com/DavidIzhaki/Phottubee_Server](https://github.com/DavidIzhaki/Phottubee-Server).

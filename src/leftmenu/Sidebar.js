@@ -1,9 +1,10 @@
 import React, { useContext } from 'react';
 
 import './Sidebar.css'; // Assuming you have some CSS for styling
-import { FaHome, FaUser } from 'react-icons/fa';
-import { MdExplore, MdSubscriptions, MdAssignmentInd, MdOutlineDarkMode, MdDarkMode, MdAdd } from 'react-icons/md';
+import { FaHome } from 'react-icons/fa';
+import {  MdAssignmentInd, MdOutlineDarkMode, MdDarkMode, MdAdd } from 'react-icons/md';
 import { FiLogIn, FiLogOut } from "react-icons/fi";
+import { ImProfile } from "react-icons/im";
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
 import { DarkModeContext } from '../context/DarkModeContext';
@@ -17,6 +18,13 @@ function Sidebar() {
   const handleLogout = () => {
     logout();
   };
+
+  const handleUserClick = () => {
+    const userId = localStorage.getItem('userId');
+    navigate(`/userPage/${userId}`);
+
+  };
+
   const resetSearchAndNavigateHome = () => {
     setSearchQuery(''); // Reset the search query
     navigate('/'); // Navigate to the home page
@@ -34,17 +42,12 @@ function Sidebar() {
         <li onClick={toggleDarkMode}>
           <a>   {darkMode ? <MdOutlineDarkMode className='icon' /> : <MdDarkMode className='icon' />}</a><span>{darkMode ? 'Dark' : 'Light'}</span>
         </li>
-        <li>
+
+        <li onClick={() =>  navigate('/userInfo')}>
           <a>
-            <MdExplore className='icon' />
+            <ImProfile className='icon' />
           </a>
-          <span>Explore</span>
-        </li>
-        <li>
-          <a>
-            <MdSubscriptions className='icon' />
-          </a>
-          <span style={{ paddingleft: '12px' }}>Subscriptions</span>
+          <span style={{ paddingleft: '12px' }}>Profile</span>
         </li>
 
 
@@ -71,7 +74,7 @@ function Sidebar() {
               <span>add Video</span>
             </li>
             <li>
-              <div className="icon-container-user-info" onClick={() => navigate('/userInfo')}>
+              <div className="icon-container-user-info" onClick={handleUserClick}>
                 <img src={`http://localhost:${user.profileImg}`}  className="user-avatar" />
                 <span>{user.displayname}</span>
               </div>

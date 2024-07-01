@@ -68,7 +68,7 @@ function LeftMenu({ isOpen }) {
                         </li>
                         <li>
                             <div className="icon-container-user-info" onClick={() => navigate('/userInfo')}>
-                                <img style={{ marginLeft: '0.5em' }} src={user.profileImg}  className="user-avatar" />
+                                <img style={{ marginLeft: '0.5em' }} src={`http://localhost:${user.profileImg}`}  className="user-avatar" />
                                 <span style={{ paddingLeft: '12px' }}>{user.displayname}</span>
                             </div>
                         </li>

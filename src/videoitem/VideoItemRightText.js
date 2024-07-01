@@ -21,7 +21,7 @@ function VideoItemRightText({ video }) {
     <div className="video-item-right-text" >
       <div className="video-thumbnail">
         <video onClick={handleVideoClick}>
-          <source src={video.videoUrl} type="video/mp4" />
+          <source src={`http://localhost:${video.videoUrl}`} type="video/mp4" />
           Your browser does not support the video tag.
         </video>
       </div>

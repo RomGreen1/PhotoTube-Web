@@ -42,7 +42,7 @@ function VideoPage() {
 
   useEffect(() => {
     if (videoC && videoRef.current) {
-      videoRef.current.src = videoC.videoUrl;
+      videoRef.current.src = `http://localhost:${videoC.videoUrl}`;
       videoRef.current.load();
     }
   }, [videoC?.videoUrl]);
@@ -172,7 +172,7 @@ function VideoPage() {
             <>
               <div className="video-player-page">
                 <video ref={videoRef} controls autoPlay>
-                  <source src={`data:video/mp4;base64,${videoC.videoUrl}`} type="video/mp4" />
+                  <source src={`http://localhost:${videoC.videoUrl}`} type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
               </div>
@@ -193,7 +193,7 @@ function VideoPage() {
 
                 <div className='video-img-dir-page'>
                   <div>
-                    <img className='video-img-page' onClick={handleUserClick} src={videoC.creatorImg} alt="video thumbnail" /><span> {videoC.createdBy}</span>
+                    <img className='video-img-page' onClick={handleUserClick} src={`http://localhost:${videoC.creatorImg}`} alt="video thumbnail" /><span> {videoC.createdBy}</span>
                   </div>
                   
 

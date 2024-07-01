@@ -32,7 +32,7 @@ const UserPage = () => {
         <div className='userPage'>
             <div className='userProfile'>
                 <div className='userProfileHeader'>
-                            <img src={mostViewedVideo.creatorImg} alt={mostViewedVideo.createdBy} className='userProfileImg' />
+                            <img src={`http://localhost:${mostViewedVideo.creatorImg}`} alt={mostViewedVideo.createdBy} className='userProfileImg' />
                             <h1 className='userDisplayName'>{mostViewedVideo.createdBy}</h1>
                 </div>
                 <hr className='userDivider' />

@@ -49,7 +49,7 @@ function UserInfo() {
                         password: userDetailsJson.password,
                         confirmPassword: '',
                         gender: userDetailsJson.gender,
-                        profileImg: userDetailsJson.profileImg || '',
+                        profileImg: `http://localhost:${userDetailsJson.profileImg}` || '',
                     });
 
                     setProfileImgPreview(userDetailsJson.profileImg || ''); // Ensure profileImg is not null

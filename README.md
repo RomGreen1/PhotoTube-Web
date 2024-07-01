@@ -52,4 +52,4 @@ npm start
 
 Phottubee_Web is the frontend component of the Phottubee social media platform. To take advantage of all its features, such as video posting, commenting, and profile management, the backend server (Phottubee_Server) needs to be running.
 
-For more information on setting up and running the backend, refer to the Phottubee_Server README at [https://github.com/DavidIzhaki/Phottubee_Server](https://github.com/DavidIzhaki/Phottubee-Server).
+For more information on setting up and running the backend, refer to the Phottubee_Server README at [https://github.com/DavidIzhaki/Phottubee-Server](https://github.com/DavidIzhaki/Phottubee-Server).

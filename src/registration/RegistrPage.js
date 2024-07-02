@@ -89,10 +89,10 @@ function RegisterPage() {
             return;
         }
 
-        if (await isExist(username)) {
-            alert('Username exists or there was an error, registration is blocked');
-            return;
-        }
+        // if (await isExist(username)) {
+        //     alert('Username exists or there was an error, registration is blocked');
+        //     return;
+        // }
 
         // Proceed to create new user using FormData
         const newUser = new FormData();
@@ -114,8 +114,8 @@ function RegisterPage() {
                 alert('Registration successful!');
                 navigate('/signin');
             } else {
-                console.error('Registration error:', data);
-                alert('An error occurred. Please try again.');
+                
+                alert(data.message);
             }
         } catch (error) {
             console.error('There was an error!', error);

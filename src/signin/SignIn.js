@@ -66,12 +66,12 @@ function SignIn() {
                 <Logo />
                 </div>
                 <div className="email">
-                    <label>Email Address</label>
+                    <label>Username</label>
                     <div className="sec-2">
                         <MailIcon />
                         <input
                             type="text"
-                            placeholder="Username@gmail.com"
+                            placeholder="············"
                             value={username}
                             onChange={e => setUsername(e.target.value)}
                         />

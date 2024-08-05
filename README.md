@@ -1,4 +1,4 @@
-# Phottubee_Web
+# PhotoTube_Web
 
 Phottubee_Web is the React-based frontend for the Phottubee social media platform, designed to seamlessly integrate with the Phottubee_Server's API endpoints. This client-side application offers users an intuitive interface to interact with the platform's key features, including video creation, commenting on videos, user profile customization, and adding users.
 
